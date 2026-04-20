@@ -75,7 +75,7 @@
 
         /* Header */
         header {
-            padding: 20px;
+            padding: 12px 20px; /* 從 20px 縮減 */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -137,7 +137,9 @@
             flex: 1;
             overflow-y: auto;
             position: relative;
-            padding: 24px;
+            padding: 12px 20px; /* 從 24px 縮減 */
+            display: flex;
+            flex-direction: column;
         }
 
         .view {
@@ -154,9 +156,9 @@
 
         /* Settings View Styles */
         .section-title {
-            font-size: 1.1rem;
+            font-size: 0.95rem; /* 從 1.1rem 縮減 */
             font-weight: 800;
-            margin: 24px 0 16px;
+            margin: 12px 0 8px; /* 大幅縮減外距 */
             color: var(--primary);
             display: flex;
             align-items: center;
@@ -174,7 +176,14 @@
         .grid-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 8px;
+        }
+
+        @media (min-width: 480px) {
+            .grid-options {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
         }
 
         /* 平板與桌面裝置使用 3 欄 */
@@ -187,15 +196,16 @@
         .btn-card {
             background: var(--bg);
             border: 2px solid transparent;
-            padding: 16px;
-            border-radius: 20px;
+            padding: 10px 8px; /* 從 16px 縮減 */
+            border-radius: 16px;
             cursor: pointer;
             text-align: center;
             transition: all 0.2s;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
+            min-height: 70px; /* 降低最小高度 */
         }
 
         .btn-card.active {
@@ -205,8 +215,8 @@
             box-shadow: 0 8px 20px -8px var(--primary);
         }
 
-        .btn-card i { font-size: 1.5rem; }
-        .btn-card span { font-weight: 600; }
+        .btn-card i { font-size: 1.2rem; } /* 從 1.5rem 縮減 */
+        .btn-card span { font-weight: 600; font-size: 0.9rem; }
 
         .count-options {
             display: flex;
@@ -216,12 +226,13 @@
         }
 
         .btn-pill {
-            padding: 12px 24px;
+            padding: 8px 16px; /* 從 12/24 縮減 */
             border-radius: 50px;
             border: 2px solid var(--bg);
             background: var(--bg);
             color: var(--text);
             font-weight: 700;
+            font-size: 0.9rem;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.2s;
@@ -234,16 +245,16 @@
         }
 
         .btn-main {
-            margin-top: 32px;
-            padding: 20px;
+            margin-top: 16px; /* 從 32px 縮減 */
+            padding: 16px; /* 從 20px 縮減 */
             border-radius: 50px;
             border: none;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.5);
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
