@@ -3,257 +3,855 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Word Master - 最終修正版</title>
+    <title>Word Master Premium - 國中英語1200單字挑戰</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1; --primary-light: #818cf8; --secondary: #ec4899;
-            --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --text-light: #64748b;
-            --success: #10b981; --error: #ef4444; --gold: #f59e0b;
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #1f2937;
+            --text-muted: #6b7280;
+            --glass: rgba(255, 255, 255, 0.8);
+            --radius: 24px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
-        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
 
-        * { box-sizing: border-box; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-        ::-webkit-scrollbar { display: none; width: 0 !important; }
-        * { -ms-overflow-style: none; scrollbar-width: none; }
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass: rgba(30, 41, 59, 0.8);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text);
-            margin: 0; padding: 0; width: 100vw; height: 100dvh; display: flex; justify-content: center; overflow: hidden;
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
         }
 
+        /* App Container */
         .app-container {
-            background-color: var(--card); width: 100%; max-width: 900px; height: 100dvh;
-            display: flex; flex-direction: column; overflow: hidden; position: relative;
+            width: 100%;
+            max-width: 650px; /* 稍微放寬以適應平板 */
+            height: 100vh; /* Fallback */
+            height: 100dvh;
+            background: var(--card);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            overflow: hidden;
         }
 
-        /* [需求] 手機寬度填滿 */
-        @media (max-width: 800px) { .app-container { width: 100vw; border-radius: 0; } }
-        @media (min-width: 801px) { body { align-items: center; } .app-container { height: 95dvh; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); } }
-
-        /* 頂部導航 */
-        .top-header { flex: 0 0 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .brand { font-size: 1.3rem; font-weight: 900; color: var(--primary); }
-        .nav-actions { display: flex; gap: 8px; }
-        .icon-btn { background: transparent; border: none; font-size: 1.25rem; cursor: pointer; padding: 8px; border-radius: 12px; color: var(--text-light); }
-
-        .progress-bar { width: 100%; height: 4px; background: rgba(0,0,0,0.05); }
-        .progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.3s; }
-
-        .content-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; width: 100%; }
-
-        /* [修正] Grid 佈局穩定性 */
-        .settings-group { width: 100%; margin-bottom: 25px; }
-        .group-title { font-size: 1rem; font-weight: 700; color: var(--text-light); margin-bottom: 15px; border-left: 5px solid var(--primary); padding-left: 10px; }
-        
-        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
-        @media (max-width: 600px) { .mode-grid { grid-template-columns: repeat(2, 1fr); } }
-
-        .btn-option {
-            background: var(--card); border: 2px solid rgba(0,0,0,0.1); padding: 15px 5px;
-            border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-weight: 600; font-size: 1.1rem; aspect-ratio: 1.8/1; transition: 0.2s;
+        @media (min-width: 601px) {
+            .app-container {
+                height: 92dvh;
+                border-radius: var(--radius);
+            }
         }
-        .btn-option.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); color: var(--primary); }
-        .btn-start { background: var(--primary); color: white; border: none; width: 100%; padding: 18px; border-radius: 50px; font-size: 1.3rem; font-weight: 900; cursor: pointer; margin-top: 10px; }
 
-        /* 遊戲區域 */
-        #view-game { width: 100%; height: 100%; flex-direction: column; display: none; }
-        .game-header { display: flex; justify-content: space-between; font-weight: 700; color: var(--text-light); margin-bottom: 10px; }
-        .main-card { flex: 1; display: flex; flex-direction: column; justify-content: center; background: var(--card); border-radius: 28px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 25px; margin-bottom: 20px; }
-        
-        .word-text { font-size: clamp(2.8rem, 7vh, 5rem); font-weight: 900; text-align: center; margin-bottom: 15px; color: var(--primary); }
-        /* [需求] 例句放大 */
-        .sentence-text { font-size: clamp(1.4rem, 3.8vh, 2.4rem); line-height: 1.4; font-weight: 500; text-align: center; width: 100%; white-space: pre-wrap; }
+        /* Header */
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: var(--glass);
+            z-index: 100;
+        }
 
-        .options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
-        @media (max-width: 600px) { .options-container { grid-template-columns: 1fr; } }
-        .btn-choice { background: var(--card); border: 2px solid rgba(0,0,0,0.1); padding: 10px; border-radius: 16px; font-size: 1.35rem; font-weight: 700; min-height: 85px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.15s; }
-        .btn-choice.correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
-        .btn-choice.wrong { background: var(--error) !important; color: white !important; border-color: var(--error) !important; }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        .game-footer { flex: 0 0 70px; border-top: 1px solid rgba(0,0,0,0.05); display: none; justify-content: space-around; align-items: center; }
-        .btn-next { background: var(--primary); color: white; border: none; padding: 12px 60px; border-radius: 50px; font-weight: 900; font-size: 1.2rem; cursor: pointer; display: none; }
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: none;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-icon:hover {
+            transform: scale(1.1);
+            background: var(--primary-light);
+            color: white;
+        }
+
+        /* Progress Bar */
+        .progress-wrapper {
+            width: 100%;
+            height: 6px;
+            background: var(--bg);
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Views Container */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            padding: 24px;
+        }
+
+        .view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Settings View Styles */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin: 24px 0 16px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        /* 平板與桌面裝置使用 3 欄 */
+        @media (min-width: 480px) {
+            .grid-options {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .btn-card {
+            background: var(--bg);
+            border: 2px solid transparent;
+            padding: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-card.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 20px -8px var(--primary);
+        }
+
+        .btn-card i { font-size: 1.5rem; }
+        .btn-card span { font-weight: 600; }
+
+        .count-options {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .btn-pill {
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: 2px solid var(--bg);
+            background: var(--bg);
+            color: var(--text);
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-pill.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .btn-main {
+            margin-top: 32px;
+            padding: 20px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-main:active {
+            transform: scale(0.98);
+        }
+
+        /* Game View Styles */
+        #game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 50px;
+            background: var(--bg);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .word-card {
+            background: var(--bg);
+            border-radius: 32px;
+            padding: clamp(24px, 5vh, 48px) 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            min-height: 180px;
+            flex: 1 0 auto; /* 讓卡片在長螢幕上長大，短螢幕縮小 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .main-word {
+            font-size: clamp(2.5rem, 10vh, 4.5rem);
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.1;
+            word-break: break-word;
+        }
+
+        .sub-text {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 100%;
+        }
+
+        .voice-btn {
+            margin-top: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            transition: background 0.2s;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 480px) {
+            .choice-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .btn-choice {
+            padding: 16px 20px;
+            border-radius: 20px;
+            border: 2px solid var(--bg);
+            background: var(--card);
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 70px;
+        }
+
+        .btn-choice:hover:not(.active) {
+            border-color: var(--primary-light);
+            background: var(--bg);
+        }
+
+        .btn-choice.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+            animation: pulse 0.3s ease-in-out;
+        }
+
+        .btn-choice.wrong {
+            background: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Spell Input */
+        #input-spell {
+            width: 100%;
+            padding: 16px;
+            border-radius: 20px;
+            border: 2px solid var(--bg);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #input-spell:focus {
+            border-color: var(--primary);
+        }
+
+        /* Result View */
+        .result-container {
+            text-align: center;
+            padding-top: 40px;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.4);
+        }
+
+        .score-val { font-size: 4rem; font-weight: 800; }
+        .score-label { font-size: 1rem; opacity: 0.9; font-weight: 600; }
+
+        /* Footer */
+        .game-footer {
+            padding: 20px;
+            display: none;
+            justify-content: center;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .btn-next {
+            width: 100%;
+            max-width: 300px;
+            padding: 16px;
+            border-radius: 50px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.3);
+            display: none;
+        }
+
+        /* Database View */
+        .db-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 10px;
+        }
+
+        .db-item {
+            aspect-ratio: 1;
+            background: var(--bg);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .db-item:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .db-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Utilities */
+        .mt-2 { margin-top: 20px; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <div class="top-header">
-        <div class="brand">🎓 Word Master</div>
-        <div class="nav-actions">
-            <button class="icon-btn" onclick="location.reload()">🏠</button>
-            <button class="icon-btn" onclick="openDatabaseSelect()">📂</button>
-            <button class="icon-btn" onclick="toggleTheme()">🌙</button>
+    <header>
+        <div class="logo">Word Master</div>
+        <div class="header-actions">
+            <button class="btn-icon" onclick="resetApp()" title="首頁">🏠</button>
+            <button class="btn-icon" onclick="showView('view-db')" title="題庫">📂</button>
+            <button class="btn-icon" onclick="toggleTheme()" id="theme-icon">🌙</button>
         </div>
+    </header>
+
+    <div class="progress-wrapper">
+        <div id="progress-fill"></div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-bar"></div></div>
-    <div class="content-area">
-        <div id="view-settings">
-            <div id="current-db-display" style="text-align:center; margin-bottom:15px; font-weight:bold; color:var(--primary);">題庫: ALL</div>
-            <div class="settings-group">
-                <span class="group-title">挑戰模式</span>
-                <div class="mode-grid">
-                    <div class="btn-option active" onclick="selectMode('EC', this)">英翻中</div>
-                    <div class="btn-option" onclick="selectMode('CE', this)">中翻英</div>
-                    <div class="btn-option" onclick="selectMode('CLOZE', this)">克漏字</div>
-                    <div class="btn-option" onclick="selectMode('LISTENING', this)">聽力</div>
-                    <div class="btn-option" onclick="selectMode('SPELL', this)">拼字</div>
-                    <div class="btn-option" onclick="selectMode('FLASHCARD', this)">單字卡</div>
+
+    <main>
+        <!-- settings view -->
+        <div id="view-settings" class="view" style="display: flex;">
+            <div id="current-db-label" style="text-align: center; font-weight: 700; color: var(--primary);">題庫：全部 (ALL)</div>
+            
+            <div class="section-title">挑戰模式</div>
+            <div class="grid-options">
+                <div class="btn-card active" onclick="setMode('EC', this)">
+                    <i>🔤</i><span>英翻中</span>
+                </div>
+                <div class="btn-card" onclick="setMode('CE', this)">
+                    <i>🇹🇼</i><span>中翻英</span>
+                </div>
+                <div class="btn-card" onclick="setMode('CLOZE', this)">
+                    <i>📝</i><span>克漏字</span>
+                </div>
+                <div class="btn-card" onclick="setMode('SPELL', this)">
+                    <i>⌨️</i><span>拼字練習</span>
+                </div>
+                <div class="btn-card" onclick="setMode('LISTENING', this)">
+                    <i>👂</i><span>聽力挑戰</span>
+                </div>
+                <div class="btn-card" onclick="setMode('FLASHCARD', this)">
+                    <i>🃏</i><span>單字卡</span>
                 </div>
             </div>
-            <div class="settings-group">
-                <span class="group-title">題數</span>
-                <div class="mode-grid" style="grid-template-columns: repeat(4, 1fr);">
-                    <div class="btn-option" onclick="selectCount(10, this)">10</div>
-                    <div class="btn-option active" onclick="selectCount(20, this)">20</div>
-                    <div class="btn-option" onclick="selectCount(50, this)">50</div>
-                    <div class="btn-option" onclick="selectCount('inf', this)">∞</div>
+
+            <div class="section-title">練習題數</div>
+            <div class="count-options">
+                <button class="btn-pill" onclick="setCount(10, this)">10</button>
+                <button class="btn-pill active" onclick="setCount(20, this)">20</button>
+                <button class="btn-pill" onclick="setCount(50, this)">50</button>
+                <button class="btn-pill" onclick="setCount(100, this)">100</button>
+                <button class="btn-pill" onclick="setCount('inf', this)">∞ 隨盡</button>
+            </div>
+
+            <button class="btn-main" onclick="startGame()">開始挑戰 GO! 🚀</button>
+        </div>
+
+        <!-- game view -->
+        <div id="view-game" class="view">
+            <div id="game-info">
+                <span id="current-mode-tag" class="badge">ENGLISH → CHINESE</span>
+                <span id="game-score-tag">得分: 0</span>
+            </div>
+            
+            <div class="word-card">
+                <div id="word-display" class="main-word">Word</div>
+                <div id="sub-display" class="sub-text">Example sentence goes here.</div>
+                <button class="voice-btn" onclick="playVoice()">🔊</button>
+            </div>
+
+            <div id="spell-area" class="hidden">
+                <input type="text" id="input-spell" placeholder="在此輸入拼字..." autocomplete="off">
+            </div>
+
+            <div id="choice-area" class="choice-grid">
+                <!-- choices will be injected here -->
+            </div>
+        </div>
+
+        <!-- result view -->
+        <div id="view-result" class="view">
+            <div class="result-container">
+                <div style="font-size: 3rem; margin-bottom: 20px;">🏆</div>
+                <h2 style="font-size: 1.5rem; margin-bottom: 8px;">測驗完成！</h2>
+                <div class="score-circle">
+                    <div id="final-score" class="score-val">80</div>
+                    <div class="score-label">POINTS</div>
                 </div>
+                <p id="result-summary" style="color: var(--text-muted); margin-bottom: 32px;">你答對了 8 題，共 10 題</p>
+                <button class="btn-main" onclick="resetApp()" style="margin-top: 0; width: 100%;">回到首頁</button>
             </div>
-            <button class="btn-start" onclick="confirmSettingsAndStart()">GO! 開始挑戰</button>
         </div>
 
-        <div id="view-category" class="mode-grid" style="display:none; grid-template-columns:repeat(auto-fill, minmax(65px, 1fr));"></div>
-
-        <div id="view-game">
-            <div class="game-header">
-                <span id="game-mode-tag">英翻中</span>
-                <span id="current-score">得分: 0</span>
+        <!-- database select view -->
+        <div id="view-db" class="view">
+            <div class="section-title">選擇題庫 (A-Z 分類)</div>
+            <div id="db-list" class="db-grid">
+                <!-- db items will be injected -->
             </div>
-            <div class="main-card">
-                <div class="word-text" id="display-main"></div>
-                <div class="sentence-text" id="display-sub"></div>
-                <button id="btn-play-voice" style="background:none; border:none; font-size:2rem; cursor:pointer; margin-top:10px;" onclick="playVoice()">🔊</button>
-            </div>
-            <div class="options-container" id="options-area"></div>
+            <button class="btn-pill mt-2" onclick="showView('view-settings')" style="width: 100%;">返回</button>
         </div>
+    </main>
 
-        <div id="view-result" style="display:none; text-align:center;">
-            <h2 style="font-size:2rem">🏆 挑戰完成</h2>
-            <div id="result-score" style="font-size: 5rem; font-weight: 900; color:var(--primary);">0</div>
-            <button onclick="location.reload()" class="btn-start">回到首頁</button>
-        </div>
-    </div>
-    <div class="game-footer" id="game-footer">
-        <button onclick="location.reload()" style="background:none; border:none; color:var(--error); font-weight:bold; cursor:pointer;">結束</button>
-        <button class="btn-next" id="btn-next" onclick="nextQuestion()">下一題 ➔</button>
-    </div>
+    <footer class="game-footer">
+        <button id="btn-next" class="btn-next" onclick="handleNext()">下一步</button>
+    </footer>
 </div>
 
 <script src="data.js"></script>
 <script>
-    const state = { category: 'ALL', mode: 'EC', targetCount: 20, queue: [], currentQ: null, score: 0, answeredCount: 0, isAnswered: false };
-
-    window.onload = () => {
-        console.log("App Starting...");
-        if(typeof wordDatabase === 'undefined') {
-            alert("找不到 data.js，請確認檔案已正確上傳且無語法錯誤。");
-            return;
-        }
-        renderCategoryButtons();
-        switchView('view-settings');
+    // State management
+    const state = {
+        db: 'ALL',
+        mode: 'EC',
+        count: 20,
+        queue: [],
+        currentIndex: 0,
+        score: 0,
+        correctCount: 0,
+        isAnswered: false,
+        theme: 'light'
     };
 
-    function switchView(id) {
-        ['view-settings', 'view-category', 'view-game', 'view-result'].forEach(v => {
-            const el = document.getElementById(v);
-            if(el) el.style.display = 'none';
-        });
-        const target = document.getElementById(id);
-        if(target) target.style.display = (id === 'view-category') ? 'grid' : 'flex';
-    }
-
-    function renderCategoryButtons() {
-        const container = document.getElementById('view-category');
-        container.innerHTML = `<button class="btn-option" style="aspect-ratio:1" onclick="chooseCat('ALL')">ALL</button>`;
-        [...new Set(wordDatabase.map(i => i.cat))].sort().forEach(c => {
-            container.innerHTML += `<button class="btn-option" style="aspect-ratio:1" onclick="chooseCat('${c}')">${c}</button>`;
-        });
-    }
-
-    function chooseCat(cat) { state.category = cat; document.getElementById('current-db-display').innerText = "題庫: " + cat; switchView('view-settings'); }
-    function openDatabaseSelect() { switchView('view-category'); }
-    function selectMode(m, btn) { state.mode = m; btn.parentElement.querySelectorAll('.btn-option').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
-    function selectCount(c, btn) { state.targetCount = c; btn.parentElement.querySelectorAll('.btn-option').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
-
-    function confirmSettingsAndStart() {
-        state.score = 0; state.answeredCount = 0;
-        let pool = state.category === 'ALL' ? wordDatabase : wordDatabase.filter(i => i.cat === state.category);
-        state.queue = [...pool].sort(() => Math.random() - 0.5).slice(0, state.targetCount === 'inf' ? 999 : state.targetCount);
-        switchView('view-game');
-        document.getElementById('game-footer').style.display = 'flex';
-        nextQuestion();
-    }
-
-    function nextQuestion() {
-        if (state.answeredCount >= state.queue.length) { switchView('view-result'); document.getElementById('result-score').innerText = state.score; document.getElementById('game-footer').style.display = 'none'; return; }
-        state.currentQ = state.queue[state.answeredCount];
-        state.isAnswered = false;
-        document.getElementById('btn-next').style.display = 'none';
-        document.getElementById('progress-bar').style.width = ((state.answeredCount / state.queue.length) * 100) + "%";
-        renderUI();
-    }
-
-    function renderUI() {
-        const q = state.currentQ;
-        const mainEl = document.getElementById('display-main');
-        const subEl = document.getElementById('display-sub');
-        const optArea = document.getElementById('options-area');
+    // Initialize
+    window.onload = () => {
+        if (typeof wordDatabase === 'undefined') {
+            alert("找不到 data.js，請確保檔案在同一目錄下。");
+            return;
+        }
+        initDBList();
         
-        optArea.style.display = 'grid';
-        document.getElementById('current-score').innerText = "得分: " + state.score;
-        document.getElementById('game-mode-tag').innerText = state.mode;
+        // Match theme
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            toggleTheme();
+        }
+    };
 
-        if (state.mode === 'CLOZE') {
-            mainEl.innerText = '______';
-            subEl.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '______') + `\n\n(${q.mean})`;
-            renderOptions('WORD');
-        } else if (state.mode === 'FLASHCARD') {
-            mainEl.innerText = q.word;
-            subEl.innerText = `${q.mean}\n\n${q.sentence}`;
-            optArea.style.display = 'none';
-            document.getElementById('btn-next').style.display = 'block';
-            state.isAnswered = true;
-        } else if (state.mode === 'CE') {
-            mainEl.innerText = q.mean;
-            subEl.innerText = "";
-            renderOptions('WORD');
-        } else {
-            mainEl.innerText = q.word;
-            subEl.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '______');
-            renderOptions('MEAN');
+    function showView(id) {
+        document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+        const view = document.getElementById(id);
+        view.style.display = 'flex';
+        
+        // Manage header visibility
+        const isGame = id === 'view-game' || id === 'view-result';
+        document.querySelector('header').style.display = (id === 'view-result') ? 'none' : 'flex';
+        document.querySelector('.game-footer').style.display = (isGame) ? 'flex' : 'none';
+        
+        if (id === 'view-settings') {
+            document.getElementById('progress-fill').style.width = '0%';
         }
     }
 
-    function renderOptions(type) {
-        const container = document.getElementById('options-area'); container.innerHTML = '';
-        let wrongs = wordDatabase.filter(i => i.id !== state.currentQ.id).sort(() => Math.random() - 0.5).slice(0, 3);
-        [state.currentQ, ...wrongs].sort(() => Math.random() - 0.5).forEach(opt => {
-            const btn = document.createElement('div');
+    function resetApp() {
+        state.currentIndex = 0;
+        state.score = 0;
+        state.correctCount = 0;
+        showView('view-settings');
+    }
+
+    /* Settings UI Logic */
+    function setMode(m, el) {
+        state.mode = m;
+        el.parentElement.querySelectorAll('.btn-card').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function setCount(c, el) {
+        state.count = c;
+        el.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function initDBList() {
+        const list = document.getElementById('db-list');
+        const cats = [...new Set(wordDatabase.map(i => i.cat))].sort();
+        
+        let html = `<div class="db-item active" onclick="selectDB('ALL', this)">ALL</div>`;
+        cats.forEach(c => {
+            html += `<div class="db-item" onclick="selectDB('${c}', this)">${c}</div>`;
+        });
+        list.innerHTML = html;
+    }
+
+    function selectDB(cat, el) {
+        state.db = cat;
+        document.getElementById('current-db-label').innerText = `題庫：${cat === 'ALL' ? '全部 (ALL)' : cat}`;
+        el.parentElement.querySelectorAll('.db-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        showView('view-settings');
+    }
+
+    /* Game Logic */
+    function startGame() {
+        let pool = state.db === 'ALL' ? wordDatabase : wordDatabase.filter(i => i.cat === state.db);
+        const limit = state.count === 'inf' ? pool.length : state.count;
+        state.queue = [...pool].sort(() => Math.random() - 0.5).slice(0, limit);
+        state.currentIndex = 0;
+        state.score = 0;
+        state.correctCount = 0;
+        
+        showView('view-game');
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        state.isAnswered = false;
+        const q = state.queue[state.currentIndex];
+        const modeTags = {
+            'EC': '英文 → 中文 (EC)',
+            'CE': '中文 → 英文 (CE)',
+            'CLOZE': '句子練習 (CLOZE)',
+            'SPELL': '拼字挑戰 (SPELL)',
+            'LISTENING': '聽力測驗 (LISTEN)',
+            'FLASHCARD': '單字閃卡 (FLASH)'
+        };
+
+        // Update UI
+        document.getElementById('current-mode-tag').innerText = modeTags[state.mode];
+        document.getElementById('game-score-tag').innerText = `得分: ${state.score}`;
+        document.getElementById('btn-next').style.display = (state.mode === 'FLASHCARD') ? 'block' : 'none';
+        document.getElementById('btn-next').innerText = (state.currentIndex === state.queue.length - 1) ? '查看結果' : '下一題';
+        
+        const progress = ((state.currentIndex) / state.queue.length) * 100;
+        document.getElementById('progress-fill').style.width = `${progress}%`;
+
+        const wordDisplay = document.getElementById('word-display');
+        const subDisplay = document.getElementById('sub-display');
+        const choiceArea = document.getElementById('choice-area');
+        const spellArea = document.getElementById('spell-area');
+        
+        choiceArea.classList.remove('hidden');
+        spellArea.classList.add('hidden');
+        wordDisplay.style.filter = 'none';
+
+        // Mode specific rendering
+        switch(state.mode) {
+            case 'EC':
+                wordDisplay.innerText = q.word;
+                subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____');
+                renderChoices('mean');
+                playVoice();
+                break;
+            case 'CE':
+                wordDisplay.innerText = q.mean.split(') ').pop(); // Remove "(n.) " prefix
+                subDisplay.innerText = "請選擇正確的英文單字";
+                renderChoices('word');
+                break;
+            case 'CLOZE':
+                wordDisplay.innerText = "Context Practice";
+                subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____') + `\n(${q.mean})`;
+                renderChoices('word');
+                break;
+            case 'SPELL':
+                wordDisplay.innerText = q.mean.split(') ').pop();
+                subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____');
+                choiceArea.classList.add('hidden');
+                spellArea.classList.remove('hidden');
+                const input = document.getElementById('input-spell');
+                input.value = '';
+                input.focus();
+                input.onkeyup = (e) => { 
+                    if(e.key === 'Enter') checkSpell();
+                };
+                break;
+            case 'LISTENING':
+                wordDisplay.innerText = "👂 ???";
+                subDisplay.innerText = "請聽音辨字";
+                renderChoices('word');
+                playVoice();
+                break;
+            case 'FLASHCARD':
+                wordDisplay.innerText = q.word;
+                subDisplay.innerText = `${q.mean}\n\n${q.sentence}`;
+                choiceArea.classList.add('hidden');
+                break;
+        }
+    }
+
+    function renderChoices(key) {
+        const q = state.queue[state.currentIndex];
+        const area = document.getElementById('choice-area');
+        area.innerHTML = '';
+        
+        // Pick 3 random wrong options
+        let wrongs = wordDatabase.filter(i => i.id !== q.id).sort(() => Math.random() - 0.5).slice(0, 3);
+        let choices = [q, ...wrongs].sort(() => Math.random() - 0.5);
+        
+        choices.forEach(opt => {
+            const btn = document.createElement('button');
             btn.className = 'btn-choice';
-            btn.innerText = type === 'WORD' ? opt.word : opt.mean;
+            btn.innerText = opt[key];
             btn.onclick = () => checkAnswer(opt, btn);
-            container.appendChild(btn);
+            area.appendChild(btn);
         });
     }
 
-    function checkAnswer(sel, btn) {
+    function checkAnswer(selected, btn) {
         if (state.isAnswered) return;
         state.isAnswered = true;
-        if (sel.id === state.currentQ.id) { btn.classList.add('correct'); state.score += 10; }
-        else {
+        const q = state.queue[state.currentIndex];
+        
+        if (selected.id === q.id) {
+            btn.classList.add('correct');
+            state.score += 10;
+            state.correctCount++;
+        } else {
             btn.classList.add('wrong');
+            // Show correct one
             document.querySelectorAll('.btn-choice').forEach(b => {
-                const correctTxt = (state.mode === 'CE' || state.mode === 'CLOZE') ? state.currentQ.word : state.currentQ.mean;
-                if (b.innerText === correctTxt) b.classList.add('correct');
+                const target = (state.mode === 'EC') ? q.mean : q.word;
+                if (b.innerText === target) b.classList.add('correct');
             });
         }
-        state.answeredCount++;
-        document.getElementById('btn-next').style.display = 'block';
+        
+        displayNextButton();
     }
 
-    function playVoice() { window.speechSynthesis.cancel(); const ut = new SpeechSynthesisUtterance(state.currentQ.word); ut.lang = 'en-US'; window.speechSynthesis.speak(ut); }
-    function toggleTheme() { document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark'); }
+    function checkSpell() {
+        if (state.isAnswered) return;
+        const input = document.getElementById('input-spell');
+        const userValue = input.value.trim().toLowerCase();
+        const correctValue = state.queue[state.currentIndex].word.toLowerCase();
+        
+        state.isAnswered = true;
+        if (userValue === correctValue) {
+            input.style.borderColor = 'var(--success)';
+            state.score += 10;
+            state.correctCount++;
+        } else {
+            input.style.borderColor = 'var(--error)';
+            document.getElementById('word-display').innerText = state.queue[state.currentIndex].word;
+        }
+        displayNextButton();
+    }
+
+    function displayNextButton() {
+        const btn = document.getElementById('btn-next');
+        btn.style.display = 'block';
+    }
+
+    function handleNext() {
+        if (state.mode === 'FLASHCARD' || state.isAnswered) {
+            state.currentIndex++;
+            if (state.currentIndex >= state.queue.length) {
+                showResult();
+            } else {
+                renderQuestion();
+            }
+        } else if (state.mode === 'SPELL') {
+            checkSpell();
+        }
+    }
+
+    function showResult() {
+        showView('view-result');
+        document.getElementById('final-score').innerText = state.score;
+        document.getElementById('result-summary').innerText = `你答對了 ${state.correctCount} 題，共 ${state.queue.length} 題`;
+        document.getElementById('progress-fill').style.width = '100%';
+    }
+
+    /* Helper Tools */
+    function playVoice() {
+        window.speechSynthesis.cancel();
+        const q = state.queue[state.currentIndex];
+        if(!q) return;
+        const msg = new SpeechSynthesisUtterance(q.word);
+        msg.lang = 'en-US';
+        msg.rate = 0.9;
+        window.speechSynthesis.speak(msg);
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            icon.innerText = '🌙';
+            state.theme = 'light';
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            icon.innerText = '☀️';
+            state.theme = 'dark';
+        }
+    }
 </script>
+
 </body>
 </html>
