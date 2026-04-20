@@ -3,106 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Word Master - 專業修正版</title>
+    <title>Word Master - 最終修正版</title>
     <style>
-        /* --- 基礎設定與寬度修復 --- */
+        :root {
+            --primary: #6366f1; --primary-light: #818cf8; --secondary: #ec4899;
+            --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --text-light: #64748b;
+            --success: #10b981; --error: #ef4444; --gold: #f59e0b;
+        }
+        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
+
+        * { box-sizing: border-box; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { display: none; width: 0 !important; }
+        * { -ms-overflow-style: none; scrollbar-width: none; }
+
         body {
-            margin: 0; padding: 0;
-            width: 100vw; height: 100dvh;
-            display: flex; justify-content: center;
-            background-color: #f8fafc;
+            font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text);
+            margin: 0; padding: 0; width: 100vw; height: 100dvh; display: flex; justify-content: center; overflow: hidden;
         }
 
         .app-container {
-            width: 100%; /* 預設 100% */
-            max-width: 900px;
-            height: 100dvh;
-            background-color: #ffffff;
-            display: flex; flex-direction: column;
-            overflow: hidden;
-            transition: all 0.3s;
+            background-color: var(--card); width: 100%; max-width: 900px; height: 100dvh;
+            display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
 
-        /* [需求]：手機寬度必須符合解析度 */
-        @media (max-width: 800px) {
-            .app-container {
-                width: 100vw; /* 強制手機版寬度 100% */
-                height: 100dvh;
-                border-radius: 0; /* 移除手機版圓角以完全填滿 */
-            }
-        }
+        /* [需求] 手機寬度填滿 */
+        @media (max-width: 800px) { .app-container { width: 100vw; border-radius: 0; } }
+        @media (min-width: 801px) { body { align-items: center; } .app-container { height: 95dvh; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); } }
 
-        /* 針對桌機/平板保留美觀圓角 */
-        @media (min-width: 801px) {
-            body { align-items: center; }
-            .app-container {
-                height: 95dvh;
-                border-radius: 32px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            }
-        }
+        /* 頂部導航 */
+        .top-header { flex: 0 0 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .brand { font-size: 1.3rem; font-weight: 900; color: var(--primary); }
+        .nav-actions { display: flex; gap: 8px; }
+        .icon-btn { background: transparent; border: none; font-size: 1.25rem; cursor: pointer; padding: 8px; border-radius: 12px; color: var(--text-light); }
 
-        /* 其他 CSS 保持您的旗艦美學版樣式... */
+        .progress-bar { width: 100%; height: 4px; background: rgba(0,0,0,0.05); }
+        .progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.3s; }
+
+        .content-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+        /* [修正] Grid 佈局穩定性 */
+        .settings-group { width: 100%; margin-bottom: 25px; }
+        .group-title { font-size: 1rem; font-weight: 700; color: var(--text-light); margin-bottom: 15px; border-left: 5px solid var(--primary); padding-left: 10px; }
+        
+        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
+        @media (max-width: 600px) { .mode-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .btn-option {
+            background: var(--card); border: 2px solid rgba(0,0,0,0.1); padding: 15px 5px;
+            border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 1.1rem; aspect-ratio: 1.8/1; transition: 0.2s;
+        }
+        .btn-option.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); color: var(--primary); }
+        .btn-start { background: var(--primary); color: white; border: none; width: 100%; padding: 18px; border-radius: 50px; font-size: 1.3rem; font-weight: 900; cursor: pointer; margin-top: 10px; }
+
+        /* 遊戲區域 */
+        #view-game { width: 100%; height: 100%; flex-direction: column; display: none; }
+        .game-header { display: flex; justify-content: space-between; font-weight: 700; color: var(--text-light); margin-bottom: 10px; }
+        .main-card { flex: 1; display: flex; flex-direction: column; justify-content: center; background: var(--card); border-radius: 28px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 25px; margin-bottom: 20px; }
+        
+        .word-text { font-size: clamp(2.8rem, 7vh, 5rem); font-weight: 900; text-align: center; margin-bottom: 15px; color: var(--primary); }
+        /* [需求] 例句放大 */
+        .sentence-text { font-size: clamp(1.4rem, 3.8vh, 2.4rem); line-height: 1.4; font-weight: 500; text-align: center; width: 100%; white-space: pre-wrap; }
+
+        .options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+        @media (max-width: 600px) { .options-container { grid-template-columns: 1fr; } }
+        .btn-choice { background: var(--card); border: 2px solid rgba(0,0,0,0.1); padding: 10px; border-radius: 16px; font-size: 1.35rem; font-weight: 700; min-height: 85px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.15s; }
+        .btn-choice.correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
+        .btn-choice.wrong { background: var(--error) !important; color: white !important; border-color: var(--error) !important; }
+
+        .game-footer { flex: 0 0 70px; border-top: 1px solid rgba(0,0,0,0.05); display: none; justify-content: space-around; align-items: center; }
+        .btn-next { background: var(--primary); color: white; border: none; padding: 12px 60px; border-radius: 50px; font-weight: 900; font-size: 1.2rem; cursor: pointer; display: none; }
     </style>
 </head>
 <body>
-    <script src="data.js"></script>
+
+<div class="app-container">
+    <div class="top-header">
+        <div class="brand">🎓 Word Master</div>
+        <div class="nav-actions">
+            <button class="icon-btn" onclick="location.reload()">🏠</button>
+            <button class="icon-btn" onclick="openDatabaseSelect()">📂</button>
+            <button class="icon-btn" onclick="toggleTheme()">🌙</button>
+        </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-bar"></div></div>
+    <div class="content-area">
+        <div id="view-settings">
+            <div id="current-db-display" style="text-align:center; margin-bottom:15px; font-weight:bold; color:var(--primary);">題庫: ALL</div>
+            <div class="settings-group">
+                <span class="group-title">挑戰模式</span>
+                <div class="mode-grid">
+                    <div class="btn-option active" onclick="selectMode('EC', this)">英翻中</div>
+                    <div class="btn-option" onclick="selectMode('CE', this)">中翻英</div>
+                    <div class="btn-option" onclick="selectMode('CLOZE', this)">克漏字</div>
+                    <div class="btn-option" onclick="selectMode('LISTENING', this)">聽力</div>
+                    <div class="btn-option" onclick="selectMode('SPELL', this)">拼字</div>
+                    <div class="btn-option" onclick="selectMode('FLASHCARD', this)">單字卡</div>
+                </div>
+            </div>
+            <div class="settings-group">
+                <span class="group-title">題數</span>
+                <div class="mode-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="btn-option" onclick="selectCount(10, this)">10</div>
+                    <div class="btn-option active" onclick="selectCount(20, this)">20</div>
+                    <div class="btn-option" onclick="selectCount(50, this)">50</div>
+                    <div class="btn-option" onclick="selectCount('inf', this)">∞</div>
+                </div>
+            </div>
+            <button class="btn-start" onclick="confirmSettingsAndStart()">GO! 開始挑戰</button>
+        </div>
+
+        <div id="view-category" class="mode-grid" style="display:none; grid-template-columns:repeat(auto-fill, minmax(65px, 1fr));"></div>
+
+        <div id="view-game">
+            <div class="game-header">
+                <span id="game-mode-tag">英翻中</span>
+                <span id="current-score">得分: 0</span>
+            </div>
+            <div class="main-card">
+                <div class="word-text" id="display-main"></div>
+                <div class="sentence-text" id="display-sub"></div>
+                <button id="btn-play-voice" style="background:none; border:none; font-size:2rem; cursor:pointer; margin-top:10px;" onclick="playVoice()">🔊</button>
+            </div>
+            <div class="options-container" id="options-area"></div>
+        </div>
+
+        <div id="view-result" style="display:none; text-align:center;">
+            <h2 style="font-size:2rem">🏆 挑戰完成</h2>
+            <div id="result-score" style="font-size: 5rem; font-weight: 900; color:var(--primary);">0</div>
+            <button onclick="location.reload()" class="btn-start">回到首頁</button>
+        </div>
+    </div>
+    <div class="game-footer" id="game-footer">
+        <button onclick="location.reload()" style="background:none; border:none; color:var(--error); font-weight:bold; cursor:pointer;">結束</button>
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()">下一題 ➔</button>
+    </div>
+</div>
+
+<script src="data.js"></script>
 <script>
-    // --- 關鍵 JS 邏輯修正 ---
+    const state = { category: 'ALL', mode: 'EC', targetCount: 20, queue: [], currentQ: null, score: 0, answeredCount: 0, isAnswered: false };
+
+    window.onload = () => {
+        console.log("App Starting...");
+        if(typeof wordDatabase === 'undefined') {
+            alert("找不到 data.js，請確認檔案已正確上傳且無語法錯誤。");
+            return;
+        }
+        renderCategoryButtons();
+        switchView('view-settings');
+    };
+
+    function switchView(id) {
+        ['view-settings', 'view-category', 'view-game', 'view-result'].forEach(v => {
+            const el = document.getElementById(v);
+            if(el) el.style.display = 'none';
+        });
+        const target = document.getElementById(id);
+        if(target) target.style.display = (id === 'view-category') ? 'grid' : 'flex';
+    }
+
+    function renderCategoryButtons() {
+        const container = document.getElementById('view-category');
+        container.innerHTML = `<button class="btn-option" style="aspect-ratio:1" onclick="chooseCat('ALL')">ALL</button>`;
+        [...new Set(wordDatabase.map(i => i.cat))].sort().forEach(c => {
+            container.innerHTML += `<button class="btn-option" style="aspect-ratio:1" onclick="chooseCat('${c}')">${c}</button>`;
+        });
+    }
+
+    function chooseCat(cat) { state.category = cat; document.getElementById('current-db-display').innerText = "題庫: " + cat; switchView('view-settings'); }
+    function openDatabaseSelect() { switchView('view-category'); }
+    function selectMode(m, btn) { state.mode = m; btn.parentElement.querySelectorAll('.btn-option').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+    function selectCount(c, btn) { state.targetCount = c; btn.parentElement.querySelectorAll('.btn-option').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+
+    function confirmSettingsAndStart() {
+        state.score = 0; state.answeredCount = 0;
+        let pool = state.category === 'ALL' ? wordDatabase : wordDatabase.filter(i => i.cat === state.category);
+        state.queue = [...pool].sort(() => Math.random() - 0.5).slice(0, state.targetCount === 'inf' ? 999 : state.targetCount);
+        switchView('view-game');
+        document.getElementById('game-footer').style.display = 'flex';
+        nextQuestion();
+    }
+
+    function nextQuestion() {
+        if (state.answeredCount >= state.queue.length) { switchView('view-result'); document.getElementById('result-score').innerText = state.score; document.getElementById('game-footer').style.display = 'none'; return; }
+        state.currentQ = state.queue[state.answeredCount];
+        state.isAnswered = false;
+        document.getElementById('btn-next').style.display = 'none';
+        document.getElementById('progress-bar').style.width = ((state.answeredCount / state.queue.length) * 100) + "%";
+        renderUI();
+    }
 
     function renderUI() {
         const q = state.currentQ;
         const mainEl = document.getElementById('display-main');
         const subEl = document.getElementById('display-sub');
-        const cardArea = document.getElementById('card-area');
         const optArea = document.getElementById('options-area');
         
         optArea.style.display = 'grid';
-        
-        if (state.mode === 'FLASHCARD') {
-            cardArea.className = "main-card split-mode";
-            mainEl.innerText = q.word; 
+        document.getElementById('current-score').innerText = "得分: " + state.score;
+        document.getElementById('game-mode-tag').innerText = state.mode;
+
+        if (state.mode === 'CLOZE') {
+            mainEl.innerText = '______';
+            subEl.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '______') + `\n\n(${q.mean})`;
+            renderOptions('WORD');
+        } else if (state.mode === 'FLASHCARD') {
+            mainEl.innerText = q.word;
             subEl.innerText = `${q.mean}\n\n${q.sentence}`;
             optArea.style.display = 'none';
+            document.getElementById('btn-next').style.display = 'block';
+            state.isAnswered = true;
+        } else if (state.mode === 'CE') {
+            mainEl.innerText = q.mean;
+            subEl.innerText = "";
+            renderOptions('WORD');
         } else {
-            cardArea.className = "main-card merged-mode";
-            if (state.mode === 'EC') { 
-                mainEl.innerText = q.word; 
-                subEl.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '______'); 
-                renderOptions('MEAN'); 
-            } else if (state.mode === 'CE') { 
-                mainEl.innerText = q.mean; 
-                subEl.innerText = ""; 
-                renderOptions('WORD'); 
-            } else if (state.mode === 'CLOZE') { 
-                /* [修正]：克漏字選項必須是英文單字 (WORD) */
-                mainEl.innerText = '______'; 
-                subEl.innerText = `${q.sentence.replace(new RegExp(q.word, 'gi'), '______')}\n\n(${q.mean})`; 
-                renderOptions('WORD'); 
-            } 
-            // 其餘模式...
+            mainEl.innerText = q.word;
+            subEl.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '______');
+            renderOptions('MEAN');
         }
     }
 
-    // 檢查答案的邏輯也需同步修正
+    function renderOptions(type) {
+        const container = document.getElementById('options-area'); container.innerHTML = '';
+        let wrongs = wordDatabase.filter(i => i.id !== state.currentQ.id).sort(() => Math.random() - 0.5).slice(0, 3);
+        [state.currentQ, ...wrongs].sort(() => Math.random() - 0.5).forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'btn-choice';
+            btn.innerText = type === 'WORD' ? opt.word : opt.mean;
+            btn.onclick = () => checkAnswer(opt, btn);
+            container.appendChild(btn);
+        });
+    }
+
     function checkAnswer(sel, btn) {
         if (state.isAnswered) return;
         state.isAnswered = true;
-        const isCorrect = (sel.id === state.currentQ.id);
-        
-        if (isCorrect) {
-            btn.classList.add('correct');
-            state.score += 10;
-        } else {
+        if (sel.id === state.currentQ.id) { btn.classList.add('correct'); state.score += 10; }
+        else {
             btn.classList.add('wrong');
-            // [修正]：標示正確答案時需判斷模式，避免英文模式標示成中文
             document.querySelectorAll('.btn-choice').forEach(b => {
                 const correctTxt = (state.mode === 'CE' || state.mode === 'CLOZE') ? state.currentQ.word : state.currentQ.mean;
                 if (b.innerText === correctTxt) b.classList.add('correct');
             });
         }
+        state.answeredCount++;
         document.getElementById('btn-next').style.display = 'block';
     }
+
+    function playVoice() { window.speechSynthesis.cancel(); const ut = new SpeechSynthesisUtterance(state.currentQ.word); ut.lang = 'en-US'; window.speechSynthesis.speak(ut); }
+    function toggleTheme() { document.body.getAttribute('data-theme') === 'dark' ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark'); }
 </script>
 </body>
 </html>
