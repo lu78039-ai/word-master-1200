@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Word Master - 專業修正版</title>
+    <style>
+        /* --- 基礎設定與寬度修復 --- */
+        body {
+            margin: 0; padding: 0;
+            width: 100vw; height: 100dvh;
+            display: flex; justify-content: center;
+            background-color: #f8fafc;
+        }
+
+        .app-container {
+            width: 100%; /* 預設 100% */
+            max-width: 900px;
+            height: 100dvh;
+            background-color: #ffffff;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        /* [需求]：手機寬度必須符合解析度 */
+        @media (max-width: 800px) {
+            .app-container {
+                width: 100vw; /* 強制手機版寬度 100% */
+                height: 100dvh;
+                border-radius: 0; /* 移除手機版圓角以完全填滿 */
+            }
+        }
+
+        /* 針對桌機/平板保留美觀圓角 */
+        @media (min-width: 801px) {
+            body { align-items: center; }
+            .app-container {
+                height: 95dvh;
+                border-radius: 32px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            }
+        }
+
+        /* 其他 CSS 保持您的旗艦美學版樣式... */
+    </style>
+</head>
+<body>
+    <script src="data.js"></script>
+<script>
+    // --- 關鍵 JS 邏輯修正 ---
+
+    function renderUI() {
+        const q = state.currentQ;
+        const mainEl = document.getElementById('display-main');
+        const subEl = document.getElementById('display-sub');
+        const cardArea = document.getElementById('card-area');
+        const optArea = document.getElementById('options-area');
+        
+        optArea.style.display = 'grid';
+        
+        if (state.mode === 'FLASHCARD') {
+            cardArea.className = "main-card split-mode";
+            mainEl.innerText = q.word; 
+            subEl.innerText = `${q.mean}\n\n${q.sentence}`;
+            optArea.style.display = 'none';
+        } else {
+            cardArea.className = "main-card merged-mode";
+            if (state.mode === 'EC') { 
+                mainEl.innerText = q.word; 
+                subEl.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '______'); 
+                renderOptions('MEAN'); 
+            } else if (state.mode === 'CE') { 
+                mainEl.innerText = q.mean; 
+                subEl.innerText = ""; 
+                renderOptions('WORD'); 
+            } else if (state.mode === 'CLOZE') { 
+                /* [修正]：克漏字選項必須是英文單字 (WORD) */
+                mainEl.innerText = '______'; 
+                subEl.innerText = `${q.sentence.replace(new RegExp(q.word, 'gi'), '______')}\n\n(${q.mean})`; 
+                renderOptions('WORD'); 
+            } 
+            // 其餘模式...
+        }
+    }
+
+    // 檢查答案的邏輯也需同步修正
+    function checkAnswer(sel, btn) {
+        if (state.isAnswered) return;
+        state.isAnswered = true;
+        const isCorrect = (sel.id === state.currentQ.id);
+        
+        if (isCorrect) {
+            btn.classList.add('correct');
+            state.score += 10;
+        } else {
+            btn.classList.add('wrong');
+            // [修正]：標示正確答案時需判斷模式，避免英文模式標示成中文
+            document.querySelectorAll('.btn-choice').forEach(b => {
+                const correctTxt = (state.mode === 'CE' || state.mode === 'CLOZE') ? state.currentQ.word : state.currentQ.mean;
+                if (b.innerText === correctTxt) b.classList.add('correct');
+            });
+        }
+        document.getElementById('btn-next').style.display = 'block';
+    }
+</script>
+</body>
+</html>
