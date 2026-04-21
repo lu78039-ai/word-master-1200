@@ -628,7 +628,8 @@
         isAnswered: false,
         theme: 'light',
         isSpeechUnlocked: false,
-        selectedChoice: null
+        selectedChoice: null,
+        currentUtterance: null
     };
 
     // Initialize
@@ -933,35 +934,32 @@
             return;
         }
 
-        // 先取消所有進行中的語音
+        // 先執行 resume 以防引擎卡住，再 cancel 前面的任務
+        window.speechSynthesis.resume();
         window.speechSynthesis.cancel();
         
         const q = state.queue[state.currentIndex];
         if(!q) return;
 
-        const speak = () => {
-            const msg = new SpeechSynthesisUtterance(q.word);
-            msg.lang = 'en-US';
-            msg.rate = 1.0; 
-            msg.volume = 1;
-            msg.pitch = 1;
+        // 電腦版也需要極短延遲 (100ms) 給予瀏覽器清空緩衝，避免發音截斷
+        setTimeout(() => {
+            // 將 utterance 存入 state 以防被垃圾回收 (GC bug in Chrome)
+            state.currentUtterance = new SpeechSynthesisUtterance(q.word);
+            state.currentUtterance.lang = 'en-US';
+            state.currentUtterance.rate = 0.9; 
+            state.currentUtterance.volume = 1;
+            state.currentUtterance.pitch = 1;
 
             const voices = window.speechSynthesis.getVoices();
             if (voices && voices.length > 0) {
-                const preferredVoice = voices.find(v => v.lang.includes('en-US') && v.localService) || 
-                                     voices.find(v => v.lang.includes('en'));
-                if (preferredVoice) msg.voice = preferredVoice;
+                const enVoice = voices.find(v => v.lang.includes('en-US') && v.localService) || 
+                                voices.find(v => v.lang.includes('en-US')) ||
+                                voices.find(v => v.lang.startsWith('en'));
+                if (enVoice) state.currentUtterance.voice = enVoice;
             }
-            window.speechSynthesis.speak(msg);
-        };
 
-        // 偵測裝置類型以決定延遲
-        const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-        if (isMobile) {
-            setTimeout(speak, 50);
-        } else {
-            speak(); // 電腦端直接發聲，提升反應速度
-        }
+            window.speechSynthesis.speak(state.currentUtterance);
+        }, 100);
     }
 
     function toggleTheme() {
