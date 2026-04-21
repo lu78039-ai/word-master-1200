@@ -263,6 +263,13 @@
             transform: scale(0.98);
         }
 
+        .btn-main:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--text-muted);
+            box-shadow: none;
+        }
+
         /* Game View Styles */
         #game-info {
             display: flex;
@@ -295,36 +302,45 @@
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
         }
 
+        .word-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
         .main-word {
-            font-size: clamp(2rem, 8vh, 3.5rem);
+            font-size: clamp(1.5rem, 6vh, 2.5rem);
             font-weight: 800;
             color: var(--primary);
-            margin-bottom: 8px;
             line-height: 1.1;
             word-break: break-word;
         }
 
         .sub-text {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
             line-height: 1.4;
             max-width: 100%;
         }
 
-        .voice-btn {
-            margin-top: 12px;
-            width: 48px;
-            height: 48px;
+        .voice-btn-small {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             border: none;
             background: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2rem;
-            transition: background 0.2s;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .voice-btn-small:hover {
+            background: var(--bg);
         }
 
         .choice-grid {
@@ -362,17 +378,23 @@
             background: var(--bg);
         }
 
+        .btn-choice.selected {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+
         .btn-choice.correct {
-            background: var(--success);
-            border-color: var(--success);
-            color: white;
+            background: var(--success) !important;
+            border-color: var(--success) !important;
+            color: white !important;
             animation: pulse 0.3s ease-in-out;
         }
 
         .btn-choice.wrong {
-            background: var(--error);
-            border-color: var(--error);
-            color: white;
+            background: var(--error) !important;
+            border-color: var(--error) !important;
+            color: white !important;
         }
 
         @keyframes pulse {
@@ -424,18 +446,20 @@
         .score-label { font-size: 1rem; opacity: 0.9; font-weight: 600; }
 
         /* Footer */
-        .game-footer {
-            padding: 20px;
-            display: none;
-            justify-content: center;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(0,0,0,0.05);
+        /* Action Area */
+        .game-actions {
+            margin-top: 16px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .game-actions .btn-main {
+            margin-top: 0;
+            flex: 1;
         }
 
-        .btn-next {
+        .btn-next-inline {
             width: 100%;
-            max-width: 300px;
             padding: 16px;
             border-radius: 50px;
             border: none;
@@ -544,9 +568,11 @@
             </div>
             
             <div class="word-card">
-                <div id="word-display" class="main-word">Word</div>
+                <div class="word-row">
+                    <div id="word-display" class="main-word">Word</div>
+                    <button class="voice-btn-small" onclick="playVoice()" title="發音">🔊</button>
+                </div>
                 <div id="sub-display" class="sub-text">Example sentence goes here.</div>
-                <button class="voice-btn" onclick="playVoice()">🔊</button>
             </div>
 
             <div id="spell-area" class="hidden">
@@ -554,7 +580,12 @@
             </div>
 
             <div id="choice-area" class="choice-grid">
-                <!-- choices will be injected here -->
+                <!-- choices -->
+            </div>
+
+            <div id="action-area" class="game-actions">
+                <button id="btn-confirm" class="btn-main" onclick="onConfirmClick()">確定</button>
+                <button id="btn-next" class="btn-next-inline" onclick="handleNext()">下一步</button>
             </div>
         </div>
 
@@ -581,10 +612,6 @@
             <button class="btn-pill mt-2" onclick="showView('view-settings')" style="width: 100%;">返回</button>
         </div>
     </main>
-
-    <footer class="game-footer">
-        <button id="btn-next" class="btn-next" onclick="handleNext()">下一步</button>
-    </footer>
 </div>
 
 <script src="data.js"></script>
@@ -600,7 +627,8 @@
         correctCount: 0,
         isAnswered: false,
         theme: 'light',
-        isSpeechUnlocked: false
+        isSpeechUnlocked: false,
+        selectedChoice: null
     };
 
     // Initialize
@@ -632,9 +660,8 @@
         view.style.display = 'flex';
         
         // Manage header visibility
-        const isGame = id === 'view-game' || id === 'view-result';
-        document.querySelector('header').style.display = (id === 'view-result') ? 'none' : 'flex';
-        document.querySelector('.game-footer').style.display = (isGame) ? 'flex' : 'none';
+        const isGameResult = id === 'view-result';
+        document.querySelector('header').style.display = isGameResult ? 'none' : 'flex';
         
         if (id === 'view-settings') {
             document.getElementById('progress-fill').style.width = '0%';
@@ -712,8 +739,20 @@
         // Update UI
         document.getElementById('current-mode-tag').innerText = modeTags[state.mode];
         document.getElementById('game-score-tag').innerText = `得分: ${state.score}`;
-        document.getElementById('btn-next').style.display = (state.mode === 'FLASHCARD') ? 'block' : 'none';
-        document.getElementById('btn-next').innerText = (state.currentIndex === state.queue.length - 1) ? '查看結果' : '下一題';
+        
+        const confirmBtn = document.getElementById('btn-confirm');
+        const nextBtn = document.getElementById('btn-next');
+        
+        if (state.mode === 'FLASHCARD' || state.mode === 'SPELL') {
+            confirmBtn.style.display = 'none';
+            nextBtn.style.display = 'block';
+            nextBtn.innerText = (state.currentIndex === state.queue.length - 1) ? '查看結果' : '下一題';
+        } else {
+            confirmBtn.style.display = 'block';
+            confirmBtn.innerText = '確定';
+            confirmBtn.disabled = true;
+            nextBtn.style.display = 'none';
+        }
         
         const progress = ((state.currentIndex) / state.queue.length) * 100;
         document.getElementById('progress-fill').style.width = `${progress}%`;
@@ -775,6 +814,7 @@
         const q = state.queue[state.currentIndex];
         const area = document.getElementById('choice-area');
         area.innerHTML = '';
+        state.selectedChoice = null;
         
         // Pick 3 random wrong options
         let wrongs = wordDatabase.filter(i => i.id !== q.id).sort(() => Math.random() - 0.5).slice(0, 3);
@@ -784,9 +824,28 @@
             const btn = document.createElement('button');
             btn.className = 'btn-choice';
             btn.innerText = opt[key];
-            btn.onclick = () => checkAnswer(opt, btn);
+            btn.onclick = () => selectChoice(opt, btn);
             area.appendChild(btn);
         });
+    }
+
+    function selectChoice(opt, btn) {
+        if (state.isAnswered) return;
+        
+        // Remove previous selection
+        document.querySelectorAll('.btn-choice').forEach(b => b.classList.remove('selected'));
+        
+        // Add current selection
+        btn.classList.add('selected');
+        state.selectedChoice = { opt, btn };
+        
+        // Enable confirm button
+        document.getElementById('btn-confirm').disabled = false;
+    }
+
+    function onConfirmClick() {
+        if (state.isAnswered || !state.selectedChoice) return;
+        checkAnswer(state.selectedChoice.opt, state.selectedChoice.btn);
     }
 
     function checkAnswer(selected, btn) {
@@ -794,20 +853,24 @@
         state.isAnswered = true;
         const q = state.queue[state.currentIndex];
         
+        // Reset button states for result
+        document.getElementById('btn-confirm').style.display = 'none';
+        const nextBtn = document.getElementById('btn-next');
+        nextBtn.style.display = 'block';
+        nextBtn.innerText = (state.currentIndex === state.queue.length - 1) ? '查看結果' : '下一題';
+
         if (selected.id === q.id) {
             btn.classList.add('correct');
             state.score += 10;
             state.correctCount++;
         } else {
             btn.classList.add('wrong');
-            // Show correct one
+            // Show correct one synchronously as requested
             document.querySelectorAll('.btn-choice').forEach(b => {
-                const target = (state.mode === 'EC') ? q.mean : q.word;
-                if (b.innerText === target) b.classList.add('correct');
+                const targetText = (state.mode === 'EC' || state.mode === 'LISTENING') ? q.mean : q.word;
+                if (b.innerText === targetText) b.classList.add('correct');
             });
         }
-        
-        displayNextButton();
     }
 
     function checkSpell() {
@@ -829,8 +892,7 @@
     }
 
     function displayNextButton() {
-        const btn = document.getElementById('btn-next');
-        btn.style.display = 'block';
+        // Obsolete with inline buttons
     }
 
     function handleNext() {
@@ -877,24 +939,29 @@
         const q = state.queue[state.currentIndex];
         if(!q) return;
 
-        // 行動裝置通常需要一點延遲來處理 cancel 與 speak 之間的切換
-        setTimeout(() => {
+        const speak = () => {
             const msg = new SpeechSynthesisUtterance(q.word);
             msg.lang = 'en-US';
-            msg.rate = 0.9;
+            msg.rate = 1.0; 
             msg.volume = 1;
             msg.pitch = 1;
 
-            // 嘗試尋找原生英語發音 (特別是 iOS 上)
             const voices = window.speechSynthesis.getVoices();
             if (voices && voices.length > 0) {
                 const preferredVoice = voices.find(v => v.lang.includes('en-US') && v.localService) || 
                                      voices.find(v => v.lang.includes('en'));
                 if (preferredVoice) msg.voice = preferredVoice;
             }
-
             window.speechSynthesis.speak(msg);
-        }, 50);
+        };
+
+        // 偵測裝置類型以決定延遲
+        const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+        if (isMobile) {
+            setTimeout(speak, 50);
+        } else {
+            speak(); // 電腦端直接發聲，提升反應速度
+        }
     }
 
     function toggleTheme() {
