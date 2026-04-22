@@ -501,6 +501,58 @@
             color: white;
         }
 
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .level-up-card {
+            background: var(--card);
+            border-radius: 32px;
+            padding: 40px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
+            border: 4px solid var(--warning);
+            transform: scale(0.9);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            to { transform: scale(1); }
+        }
+
+        .leaderboard-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .leaderboard-item {
+            background: var(--bg);
+            padding: 12px 20px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .leaderboard-item .lvl { font-weight: 800; color: var(--primary); }
+        .leaderboard-item .tm { font-size: 0.85rem; color: var(--text-muted); }
+
         /* Utilities */
         .mt-2 { margin-top: 20px; }
         .hidden { display: none !important; }
@@ -512,6 +564,7 @@
     <header>
         <div class="logo">Word Master</div>
         <div class="header-actions">
+            <button class="btn-icon" onclick="showView('view-leaderboard')" title="名人榜">🏆</button>
             <button class="btn-icon" onclick="resetApp()" title="首頁">🏠</button>
             <button class="btn-icon" onclick="showView('view-db')" title="題庫">📂</button>
             <button class="btn-icon" onclick="toggleTheme()" id="theme-icon">🌙</button>
@@ -611,7 +664,31 @@
             </div>
             <button class="btn-pill mt-2" onclick="showView('view-settings')" style="width: 100%;">返回</button>
         </div>
+
+        <!-- leaderboard view -->
+        <div id="view-leaderboard" class="view">
+            <div class="section-title">🏆 名人榜 (等級記錄)</div>
+            <div style="text-align: center; margin: 10px 0;">
+                <div class="badge" style="background: var(--warning); color: white; padding: 10px 20px;">
+                    目前總累積單字量：<span id="total-words-val">0</span>
+                </div>
+            </div>
+            <div id="leaderboard-container" class="leaderboard-list">
+                <!-- items injected -->
+            </div>
+            <button class="btn-main" onclick="showView('view-settings')" style="margin-top: 20px; width: 100%;">返回</button>
+        </div>
     </main>
+
+    <!-- Global Modals -->
+    <div id="level-modal" class="modal-overlay">
+        <div class="level-up-card">
+            <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
+            <h2 id="level-up-title" style="color: var(--warning); margin-bottom: 10px;">升級了！</h2>
+            <p id="level-up-msg" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 24px;">恭喜您進入第 1 級</p>
+            <button class="btn-main" onclick="closeLevelModal()" style="width: 100%; margin: 0;">太棒了！</button>
+        </div>
+    </div>
 </div>
 
 <script src="data.js"></script>
@@ -629,8 +706,13 @@
         theme: 'light',
         isSpeechUnlocked: false,
         selectedChoice: null,
-        currentUtterance: null
+        currentUtterance: null,
+        totalWords: 0,
+        leaderRecords: []
     };
+
+    // Constant for level calculation
+    const WORDS_PER_LEVEL = 50;
 
     // Initialize
     window.onload = () => {
@@ -639,6 +721,7 @@
             return;
         }
         initDBList();
+        loadProgress();
         
         // Match theme
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -655,6 +738,22 @@
         }
     };
 
+    function loadProgress() {
+        const saved = localStorage.getItem('wordMasterProgress');
+        if (saved) {
+            const data = JSON.parse(saved);
+            state.totalWords = data.totalWords || 0;
+            state.leaderRecords = data.leaderRecords || [];
+        }
+    }
+
+    function saveProgress() {
+        localStorage.setItem('wordMasterProgress', JSON.stringify({
+            totalWords: state.totalWords,
+            leaderRecords: state.leaderRecords
+        }));
+    }
+
     function showView(id) {
         document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
         const view = document.getElementById(id);
@@ -666,6 +765,10 @@
         
         if (id === 'view-settings') {
             document.getElementById('progress-fill').style.width = '0%';
+        }
+
+        if (id === 'view-leaderboard') {
+            renderLeaderboard();
         }
     }
 
@@ -766,6 +869,7 @@
         choiceArea.classList.remove('hidden');
         spellArea.classList.add('hidden');
         wordDisplay.style.filter = 'none';
+        wordDisplay.parentElement.style.display = 'flex';
 
         // Mode specific rendering
         switch(state.mode) {
@@ -781,7 +885,8 @@
                 renderChoices('word');
                 break;
             case 'CLOZE':
-                wordDisplay.innerText = "Context Practice";
+                wordDisplay.innerText = "";
+                wordDisplay.parentElement.style.display = 'none';
                 subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____') + `\n(${q.mean})`;
                 renderChoices('word');
                 break;
@@ -910,10 +1015,59 @@
     }
 
     function showResult() {
+        // Update cumulative progress
+        const sessionCount = state.queue.length;
+        const oldLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
+        
+        state.totalWords += sessionCount;
+        const newLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
+
+        if (newLevel > oldLevel) {
+            handleLevelUp(newLevel);
+        }
+
+        saveProgress();
+
         showView('view-result');
         document.getElementById('final-score').innerText = state.score;
         document.getElementById('result-summary').innerText = `你答對了 ${state.correctCount} 題，共 ${state.queue.length} 題`;
         document.getElementById('progress-fill').style.width = '100%';
+    }
+
+    function handleLevelUp(lvl) {
+        const now = new Date();
+        const timeStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+        
+        // Record record
+        state.leaderRecords.unshift({ level: lvl, time: timeStr });
+        
+        // Show modal
+        document.getElementById('level-up-msg').innerText = `恭喜您進入第 ${lvl} 級`;
+        document.getElementById('level-modal').style.display = 'flex';
+    }
+
+    function closeLevelModal() {
+        document.getElementById('level-modal').style.display = 'none';
+    }
+
+    function renderLeaderboard() {
+        document.getElementById('total-words-val').innerText = state.totalWords;
+        const container = document.getElementById('leaderboard-container');
+        if (state.leaderRecords.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted);">尚未達成等級升遷...繼續加油！</div>';
+            return;
+        }
+
+        let html = '';
+        state.leaderRecords.forEach(r => {
+            html += `
+                <div class="leaderboard-item">
+                    <span class="lvl">LEVEL ${r.level}</span>
+                    <span class="tm">${r.time}</span>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
     }
 
     /* Helper Tools */
