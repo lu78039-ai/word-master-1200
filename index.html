@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -54,8 +55,10 @@
         /* App Container */
         .app-container {
             width: 100%;
-            max-width: 650px; /* 稍微放寬以適應平板 */
-            height: 100vh; /* Fallback */
+            max-width: 650px;
+            /* 稍微放寬以適應平板 */
+            height: 100vh;
+            /* Fallback */
             height: 100dvh;
             background: var(--card);
             display: flex;
@@ -75,7 +78,8 @@
 
         /* Header */
         header {
-            padding: 12px 20px; /* 從 20px 縮減 */
+            padding: 12px 20px;
+            /* 從 20px 縮減 */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -137,7 +141,8 @@
             flex: 1;
             overflow-y: auto;
             position: relative;
-            padding: 12px 20px; /* 從 24px 縮減 */
+            padding: 12px 20px;
+            /* 從 24px 縮減 */
             display: flex;
             flex-direction: column;
         }
@@ -151,15 +156,24 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Settings View Styles */
         .section-title {
-            font-size: 0.95rem; /* 從 1.1rem 縮減 */
+            font-size: 0.95rem;
+            /* 從 1.1rem 縮減 */
             font-weight: 800;
-            margin: 12px 0 8px; /* 大幅縮減外距 */
+            margin: 12px 0 8px;
+            /* 大幅縮減外距 */
             color: var(--primary);
             display: flex;
             align-items: center;
@@ -197,7 +211,8 @@
         .btn-card {
             background: var(--bg);
             border: 2px solid transparent;
-            padding: 10px 8px; /* 從 16px 縮減 */
+            padding: 10px 8px;
+            /* 從 16px 縮減 */
             border-radius: 16px;
             cursor: pointer;
             text-align: center;
@@ -206,7 +221,8 @@
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            min-height: 70px; /* 降低最小高度 */
+            min-height: 70px;
+            /* 降低最小高度 */
         }
 
         .btn-card.active {
@@ -216,8 +232,15 @@
             box-shadow: 0 8px 20px -8px var(--primary);
         }
 
-        .btn-card i { font-size: 1.2rem; } /* 從 1.5rem 縮減 */
-        .btn-card span { font-weight: 600; font-size: 0.9rem; }
+        .btn-card i {
+            font-size: 1.2rem;
+        }
+
+        /* 從 1.5rem 縮減 */
+        .btn-card span {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
 
         .count-options {
             display: flex;
@@ -227,7 +250,8 @@
         }
 
         .btn-pill {
-            padding: 8px 16px; /* 從 12/24 縮減 */
+            padding: 8px 16px;
+            /* 從 12/24 縮減 */
             border-radius: 50px;
             border: 2px solid var(--bg);
             background: var(--bg);
@@ -246,8 +270,10 @@
         }
 
         .btn-main {
-            margin-top: 16px; /* 從 32px 縮減 */
-            padding: 16px; /* 從 20px 縮減 */
+            margin-top: 16px;
+            /* 從 32px 縮減 */
+            padding: 16px;
+            /* 從 20px 縮減 */
             border-radius: 50px;
             border: none;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
@@ -299,7 +325,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .word-row {
@@ -330,7 +356,7 @@
             border-radius: 50%;
             border: none;
             background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -380,14 +406,16 @@
 
         .btn-choice.selected {
             border-color: var(--primary);
-            background: rgba(79, 70, 229, 0.05);
-            box-shadow: 0 0 0 1px var(--primary);
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 20px -8px var(--primary);
         }
 
         .btn-choice.correct {
             background: var(--success) !important;
             border-color: var(--success) !important;
             color: white !important;
+            box-shadow: 0 8px 20px -8px var(--success);
             animation: pulse 0.3s ease-in-out;
         }
 
@@ -395,12 +423,21 @@
             background: var(--error) !important;
             border-color: var(--error) !important;
             color: white !important;
+            box-shadow: 0 8px 20px -8px var(--error);
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* Spell Input */
@@ -442,8 +479,16 @@
             box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.4);
         }
 
-        .score-val { font-size: 4rem; font-weight: 800; }
-        .score-label { font-size: 1rem; opacity: 0.9; font-weight: 600; }
+        .score-val {
+            font-size: 4rem;
+            font-weight: 800;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
 
         /* Footer */
         /* Action Area */
@@ -452,7 +497,7 @@
             display: flex;
             gap: 12px;
         }
-        
+
         .game-actions .btn-main {
             margin-top: 0;
             flex: 1;
@@ -504,8 +549,11 @@
         /* Modal */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
             z-index: 1000;
             display: none;
@@ -521,14 +569,16 @@
             text-align: center;
             max-width: 90%;
             width: 400px;
-            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
             border: 4px solid var(--warning);
             transform: scale(0.9);
             animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         @keyframes popIn {
-            to { transform: scale(1); }
+            to {
+                transform: scale(1);
+            }
         }
 
         .leaderboard-list {
@@ -550,586 +600,602 @@
             border-left: 4px solid var(--primary);
         }
 
-        .leaderboard-item .lvl { font-weight: 800; color: var(--primary); }
-        .leaderboard-item .tm { font-size: 0.85rem; color: var(--text-muted); }
+        .leaderboard-item .lvl {
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .leaderboard-item .tm {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
 
         /* Utilities */
-        .mt-2 { margin-top: 20px; }
-        .hidden { display: none !important; }
+        .mt-2 {
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="app-container">
-    <header>
-        <div class="logo">Word Master</div>
-        <div class="header-actions">
-            <button class="btn-icon" onclick="showView('view-leaderboard')" title="名人榜">🏆</button>
-            <button class="btn-icon" onclick="resetApp()" title="首頁">🏠</button>
-            <button class="btn-icon" onclick="showView('view-db')" title="題庫">📂</button>
-            <button class="btn-icon" onclick="toggleTheme()" id="theme-icon">🌙</button>
-        </div>
-    </header>
+    <div class="app-container">
+        <header>
+            <div class="logo">Word Master</div>
+            <div class="header-actions">
+                <button class="btn-icon" onclick="showView('view-leaderboard')" title="名人榜">🏆</button>
+                <button class="btn-icon" onclick="resetApp()" title="首頁">🏠</button>
+                <button class="btn-icon" onclick="showView('view-db')" title="題庫">📂</button>
+                <button class="btn-icon" onclick="toggleTheme()" id="theme-icon">🌙</button>
+            </div>
+        </header>
 
-    <div class="progress-wrapper">
-        <div id="progress-fill"></div>
+        <div class="progress-wrapper">
+            <div id="progress-fill"></div>
+        </div>
+
+        <main>
+            <!-- settings view -->
+            <div id="view-settings" class="view" style="display: flex;">
+                <div id="current-db-label" style="text-align: center; font-weight: 700; color: var(--primary);">題庫：全部
+                    (ALL)</div>
+
+                <div class="section-title">挑戰模式</div>
+                <div class="grid-options">
+                    <div class="btn-card active" onclick="setMode('EC', this)">
+                        <i>🔤</i><span>英翻中</span>
+                    </div>
+                    <div class="btn-card" onclick="setMode('CE', this)">
+                        <i>🇹🇼</i><span>中翻英</span>
+                    </div>
+                    <div class="btn-card" onclick="setMode('CLOZE', this)">
+                        <i>📝</i><span>克漏字</span>
+                    </div>
+                    <div class="btn-card" onclick="setMode('SPELL', this)">
+                        <i>⌨️</i><span>拼字練習</span>
+                    </div>
+                    <div class="btn-card" onclick="setMode('LISTENING', this)">
+                        <i>👂</i><span>聽力挑戰</span>
+                    </div>
+                    <div class="btn-card" onclick="setMode('FLASHCARD', this)">
+                        <i>🃏</i><span>單字卡</span>
+                    </div>
+                </div>
+
+                <div class="section-title">練習題數</div>
+                <div class="count-options">
+                    <button class="btn-pill" onclick="setCount(10, this)">10</button>
+                    <button class="btn-pill active" onclick="setCount(20, this)">20</button>
+                    <button class="btn-pill" onclick="setCount(50, this)">50</button>
+                    <button class="btn-pill" onclick="setCount('inf', this)">∞</button>
+                </div>
+
+                <button class="btn-main" onclick="startGame()">開始挑戰 GO! 🚀</button>
+            </div>
+
+            <!-- game view -->
+            <div id="view-game" class="view">
+                <div id="game-info">
+                    <span id="current-mode-tag" class="badge">ENGLISH → CHINESE</span>
+                    <span id="game-score-tag">得分: 0</span>
+                </div>
+
+                <div class="word-card">
+                    <div class="word-row">
+                        <div id="word-display" class="main-word">Word</div>
+                        <button class="voice-btn-small" onclick="playVoice()" title="發音">🔊</button>
+                    </div>
+                    <div id="sub-display" class="sub-text">Example sentence goes here.</div>
+                </div>
+
+                <div id="spell-area" class="hidden">
+                    <input type="text" id="input-spell" placeholder="在此輸入拼字..." autocomplete="off">
+                </div>
+
+                <div id="choice-area" class="choice-grid">
+                    <!-- choices -->
+                </div>
+
+                <div id="action-area" class="game-actions">
+                    <button id="btn-confirm" class="btn-main" onclick="onConfirmClick()">確定</button>
+                    <button id="btn-next" class="btn-next-inline" onclick="handleNext()">下一步</button>
+                </div>
+            </div>
+
+            <!-- result view -->
+            <div id="view-result" class="view">
+                <div class="result-container">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">🏆</div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 8px;">測驗完成！</h2>
+                    <div class="score-circle">
+                        <div id="final-score" class="score-val">80</div>
+                        <div class="score-label">POINTS</div>
+                    </div>
+                    <p id="result-summary" style="color: var(--text-muted); margin-bottom: 32px;">你答對了 8 題，共 10 題</p>
+                    <button class="btn-main" onclick="resetApp()" style="margin-top: 0; width: 100%;">回到首頁</button>
+                </div>
+            </div>
+
+            <!-- database select view -->
+            <div id="view-db" class="view">
+                <div class="section-title">選擇題庫 (A-Z 分類)</div>
+                <div id="db-list" class="db-grid">
+                    <!-- db items will be injected -->
+                </div>
+                <button class="btn-pill mt-2" onclick="showView('view-settings')" style="width: 100%;">返回</button>
+            </div>
+
+            <!-- leaderboard view -->
+            <div id="view-leaderboard" class="view">
+                <div class="section-title">🏆 名人榜 (等級記錄)</div>
+                <div style="text-align: center; margin: 10px 0;">
+                    <div class="badge" style="background: var(--warning); color: white; padding: 10px 20px;">
+                        目前總累積單字量：<span id="total-words-val">0</span>
+                    </div>
+                </div>
+                <div id="leaderboard-container" class="leaderboard-list">
+                    <!-- items injected -->
+                </div>
+                <button class="btn-main" onclick="showView('view-settings')"
+                    style="margin-top: 20px; width: 100%;">返回</button>
+            </div>
+        </main>
+
+        <!-- Global Modals -->
+        <div id="level-modal" class="modal-overlay">
+            <div class="level-up-card">
+                <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
+                <h2 id="level-up-title" style="color: var(--warning); margin-bottom: 10px;">升級了！</h2>
+                <p id="level-up-msg" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 24px;">恭喜您進入第 1 級</p>
+                <button class="btn-main" onclick="closeLevelModal()" style="width: 100%; margin: 0;">太棒了！</button>
+            </div>
+        </div>
     </div>
 
-    <main>
-        <!-- settings view -->
-        <div id="view-settings" class="view" style="display: flex;">
-            <div id="current-db-label" style="text-align: center; font-weight: 700; color: var(--primary);">題庫：全部 (ALL)</div>
-            
-            <div class="section-title">挑戰模式</div>
-            <div class="grid-options">
-                <div class="btn-card active" onclick="setMode('EC', this)">
-                    <i>🔤</i><span>英翻中</span>
-                </div>
-                <div class="btn-card" onclick="setMode('CE', this)">
-                    <i>🇹🇼</i><span>中翻英</span>
-                </div>
-                <div class="btn-card" onclick="setMode('CLOZE', this)">
-                    <i>📝</i><span>克漏字</span>
-                </div>
-                <div class="btn-card" onclick="setMode('SPELL', this)">
-                    <i>⌨️</i><span>拼字練習</span>
-                </div>
-                <div class="btn-card" onclick="setMode('LISTENING', this)">
-                    <i>👂</i><span>聽力挑戰</span>
-                </div>
-                <div class="btn-card" onclick="setMode('FLASHCARD', this)">
-                    <i>🃏</i><span>單字卡</span>
-                </div>
-            </div>
-
-            <div class="section-title">練習題數</div>
-            <div class="count-options">
-                <button class="btn-pill" onclick="setCount(10, this)">10</button>
-                <button class="btn-pill active" onclick="setCount(20, this)">20</button>
-                <button class="btn-pill" onclick="setCount(50, this)">50</button>
-                <button class="btn-pill" onclick="setCount('inf', this)">∞</button>
-            </div>
-
-            <button class="btn-main" onclick="startGame()">開始挑戰 GO! 🚀</button>
-        </div>
-
-        <!-- game view -->
-        <div id="view-game" class="view">
-            <div id="game-info">
-                <span id="current-mode-tag" class="badge">ENGLISH → CHINESE</span>
-                <span id="game-score-tag">得分: 0</span>
-            </div>
-            
-            <div class="word-card">
-                <div class="word-row">
-                    <div id="word-display" class="main-word">Word</div>
-                    <button class="voice-btn-small" onclick="playVoice()" title="發音">🔊</button>
-                </div>
-                <div id="sub-display" class="sub-text">Example sentence goes here.</div>
-            </div>
-
-            <div id="spell-area" class="hidden">
-                <input type="text" id="input-spell" placeholder="在此輸入拼字..." autocomplete="off">
-            </div>
-
-            <div id="choice-area" class="choice-grid">
-                <!-- choices -->
-            </div>
-
-            <div id="action-area" class="game-actions">
-                <button id="btn-confirm" class="btn-main" onclick="onConfirmClick()">確定</button>
-                <button id="btn-next" class="btn-next-inline" onclick="handleNext()">下一步</button>
-            </div>
-        </div>
-
-        <!-- result view -->
-        <div id="view-result" class="view">
-            <div class="result-container">
-                <div style="font-size: 3rem; margin-bottom: 20px;">🏆</div>
-                <h2 style="font-size: 1.5rem; margin-bottom: 8px;">測驗完成！</h2>
-                <div class="score-circle">
-                    <div id="final-score" class="score-val">80</div>
-                    <div class="score-label">POINTS</div>
-                </div>
-                <p id="result-summary" style="color: var(--text-muted); margin-bottom: 32px;">你答對了 8 題，共 10 題</p>
-                <button class="btn-main" onclick="resetApp()" style="margin-top: 0; width: 100%;">回到首頁</button>
-            </div>
-        </div>
-
-        <!-- database select view -->
-        <div id="view-db" class="view">
-            <div class="section-title">選擇題庫 (A-Z 分類)</div>
-            <div id="db-list" class="db-grid">
-                <!-- db items will be injected -->
-            </div>
-            <button class="btn-pill mt-2" onclick="showView('view-settings')" style="width: 100%;">返回</button>
-        </div>
-
-        <!-- leaderboard view -->
-        <div id="view-leaderboard" class="view">
-            <div class="section-title">🏆 名人榜 (等級記錄)</div>
-            <div style="text-align: center; margin: 10px 0;">
-                <div class="badge" style="background: var(--warning); color: white; padding: 10px 20px;">
-                    目前總累積單字量：<span id="total-words-val">0</span>
-                </div>
-            </div>
-            <div id="leaderboard-container" class="leaderboard-list">
-                <!-- items injected -->
-            </div>
-            <button class="btn-main" onclick="showView('view-settings')" style="margin-top: 20px; width: 100%;">返回</button>
-        </div>
-    </main>
-
-    <!-- Global Modals -->
-    <div id="level-modal" class="modal-overlay">
-        <div class="level-up-card">
-            <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
-            <h2 id="level-up-title" style="color: var(--warning); margin-bottom: 10px;">升級了！</h2>
-            <p id="level-up-msg" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 24px;">恭喜您進入第 1 級</p>
-            <button class="btn-main" onclick="closeLevelModal()" style="width: 100%; margin: 0;">太棒了！</button>
-        </div>
-    </div>
-</div>
-
-<script src="data.js"></script>
-<script>
-    // State management
-    const state = {
-        db: 'ALL',
-        mode: 'EC',
-        count: 20,
-        queue: [],
-        currentIndex: 0,
-        score: 0,
-        correctCount: 0,
-        isAnswered: false,
-        theme: 'light',
-        isSpeechUnlocked: false,
-        selectedChoice: null,
-        currentUtterance: null,
-        totalWords: 0,
-        leaderRecords: []
-    };
-
-    // Constant for level calculation
-    const WORDS_PER_LEVEL = 50;
-
-    // Initialize
-    window.onload = () => {
-        if (typeof wordDatabase === 'undefined') {
-            alert("找不到 data.js，請確保檔案在同一目錄下。");
-            return;
-        }
-        initDBList();
-        loadProgress();
-        
-        // Match theme
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            toggleTheme();
-        }
-
-        // Force load voices
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.getVoices();
-            // Some browsers need this event to actually populate the list
-            if (speechSynthesis.onvoiceschanged !== undefined) {
-                speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
-            }
-        }
-    };
-
-    function loadProgress() {
-        const saved = localStorage.getItem('wordMasterProgress');
-        if (saved) {
-            const data = JSON.parse(saved);
-            state.totalWords = data.totalWords || 0;
-            state.leaderRecords = data.leaderRecords || [];
-        }
-    }
-
-    function saveProgress() {
-        localStorage.setItem('wordMasterProgress', JSON.stringify({
-            totalWords: state.totalWords,
-            leaderRecords: state.leaderRecords
-        }));
-    }
-
-    function showView(id) {
-        document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
-        const view = document.getElementById(id);
-        view.style.display = 'flex';
-        
-        // Manage header visibility
-        const isGameResult = id === 'view-result';
-        document.querySelector('header').style.display = isGameResult ? 'none' : 'flex';
-        
-        if (id === 'view-settings') {
-            document.getElementById('progress-fill').style.width = '0%';
-        }
-
-        if (id === 'view-leaderboard') {
-            renderLeaderboard();
-        }
-    }
-
-    function resetApp() {
-        state.currentIndex = 0;
-        state.score = 0;
-        state.correctCount = 0;
-        showView('view-settings');
-    }
-
-    /* Settings UI Logic */
-    function setMode(m, el) {
-        state.mode = m;
-        el.parentElement.querySelectorAll('.btn-card').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    function setCount(c, el) {
-        state.count = c;
-        el.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    function initDBList() {
-        const list = document.getElementById('db-list');
-        const cats = [...new Set(wordDatabase.map(i => i.cat))].sort();
-        
-        let html = `<div class="db-item active" onclick="selectDB('ALL', this)">ALL</div>`;
-        cats.forEach(c => {
-            html += `<div class="db-item" onclick="selectDB('${c}', this)">${c}</div>`;
-        });
-        list.innerHTML = html;
-    }
-
-    function selectDB(cat, el) {
-        state.db = cat;
-        document.getElementById('current-db-label').innerText = `題庫：${cat === 'ALL' ? '全部 (ALL)' : cat}`;
-        el.parentElement.querySelectorAll('.db-item').forEach(i => i.classList.remove('active'));
-        el.classList.add('active');
-        showView('view-settings');
-    }
-
-    function startGame() {
-        let pool = state.db === 'ALL' ? wordDatabase : wordDatabase.filter(i => i.cat === state.db);
-        const limit = state.count === 'inf' ? pool.length : state.count;
-        state.queue = [...pool].sort(() => Math.random() - 0.5).slice(0, limit);
-        state.currentIndex = 0;
-        state.score = 0;
-        state.correctCount = 0;
-        
-        // Unlock speech on first user interaction
-        if (!state.isSpeechUnlocked) {
-            unlockSpeech();
-        }
-        
-        showView('view-game');
-        renderQuestion();
-    }
-
-    function renderQuestion() {
-        state.isAnswered = false;
-        const q = state.queue[state.currentIndex];
-        const modeTags = {
-            'EC': '英文 → 中文 (EC)',
-            'CE': '中文 → 英文 (CE)',
-            'CLOZE': '句子練習 (CLOZE)',
-            'SPELL': '拼字挑戰 (SPELL)',
-            'LISTENING': '聽力測驗 (LISTEN)',
-            'FLASHCARD': '單字閃卡 (FLASH)'
+    <script src="data.js"></script>
+    <script>
+        // State management
+        const state = {
+            db: 'ALL',
+            mode: 'EC',
+            count: 20,
+            queue: [],
+            currentIndex: 0,
+            score: 0,
+            correctCount: 0,
+            isAnswered: false,
+            theme: 'light',
+            isSpeechUnlocked: false,
+            selectedChoice: null,
+            currentUtterance: null,
+            totalWords: 0,
+            leaderRecords: []
         };
 
-        // Update UI
-        document.getElementById('current-mode-tag').innerText = modeTags[state.mode];
-        document.getElementById('game-score-tag').innerText = `得分: ${state.score}`;
-        
-        const confirmBtn = document.getElementById('btn-confirm');
-        const nextBtn = document.getElementById('btn-next');
-        
-        if (state.mode === 'FLASHCARD' || state.mode === 'SPELL') {
-            confirmBtn.style.display = 'none';
-            nextBtn.style.display = 'block';
-            nextBtn.innerText = (state.currentIndex === state.queue.length - 1) ? '查看結果' : '下一題';
-        } else {
-            confirmBtn.style.display = 'block';
-            confirmBtn.innerText = '確定';
-            confirmBtn.disabled = true;
-            nextBtn.style.display = 'none';
+        // Constant for level calculation
+        const WORDS_PER_LEVEL = 50;
+
+        // Initialize
+        window.onload = () => {
+            if (typeof wordDatabase === 'undefined') {
+                alert("找不到 data.js，請確保檔案在同一目錄下。");
+                return;
+            }
+            initDBList();
+            loadProgress();
+
+            // Match theme
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                toggleTheme();
+            }
+
+            // Force load voices
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+                // Some browsers need this event to actually populate the list
+                if (speechSynthesis.onvoiceschanged !== undefined) {
+                    speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+                }
+            }
+        };
+
+        function loadProgress() {
+            const saved = localStorage.getItem('wordMasterProgress');
+            if (saved) {
+                const data = JSON.parse(saved);
+                state.totalWords = data.totalWords || 0;
+                state.leaderRecords = data.leaderRecords || [];
+            }
         }
-        
-        const progress = ((state.currentIndex) / state.queue.length) * 100;
-        document.getElementById('progress-fill').style.width = `${progress}%`;
 
-        const wordDisplay = document.getElementById('word-display');
-        const subDisplay = document.getElementById('sub-display');
-        const choiceArea = document.getElementById('choice-area');
-        const spellArea = document.getElementById('spell-area');
-        
-        choiceArea.classList.remove('hidden');
-        spellArea.classList.add('hidden');
-        wordDisplay.style.filter = 'none';
-        wordDisplay.parentElement.style.display = 'flex';
-
-        // Mode specific rendering
-        switch(state.mode) {
-            case 'EC':
-                wordDisplay.innerText = q.word;
-                subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____');
-                renderChoices('mean');
-                playVoice();
-                break;
-            case 'CE':
-                wordDisplay.innerText = q.mean.split(') ').pop(); // Remove "(n.) " prefix
-                subDisplay.innerText = "請選擇正確的英文單字";
-                renderChoices('word');
-                break;
-            case 'CLOZE':
-                wordDisplay.innerText = "";
-                wordDisplay.parentElement.style.display = 'none';
-                subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____') + `\n(${q.mean})`;
-                renderChoices('word');
-                break;
-            case 'SPELL':
-                wordDisplay.innerText = q.mean.split(') ').pop();
-                subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____');
-                choiceArea.classList.add('hidden');
-                spellArea.classList.remove('hidden');
-                const input = document.getElementById('input-spell');
-                input.value = '';
-                input.focus();
-                input.onkeyup = (e) => { 
-                    if(e.key === 'Enter') checkSpell();
-                };
-                break;
-            case 'LISTENING':
-                wordDisplay.innerText = "👂 ???";
-                subDisplay.innerText = "請聽音辨字";
-                renderChoices('word');
-                playVoice();
-                break;
-            case 'FLASHCARD':
-                wordDisplay.innerText = q.word;
-                subDisplay.innerText = `${q.mean}\n\n${q.sentence}`;
-                choiceArea.classList.add('hidden');
-                break;
+        function saveProgress() {
+            localStorage.setItem('wordMasterProgress', JSON.stringify({
+                totalWords: state.totalWords,
+                leaderRecords: state.leaderRecords
+            }));
         }
-    }
 
-    function renderChoices(key) {
-        const q = state.queue[state.currentIndex];
-        const area = document.getElementById('choice-area');
-        area.innerHTML = '';
-        state.selectedChoice = null;
-        
-        // Pick 3 random wrong options
-        let wrongs = wordDatabase.filter(i => i.id !== q.id).sort(() => Math.random() - 0.5).slice(0, 3);
-        let choices = [q, ...wrongs].sort(() => Math.random() - 0.5);
-        
-        choices.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-choice';
-            btn.innerText = opt[key];
-            btn.onclick = () => selectChoice(opt, btn);
-            area.appendChild(btn);
-        });
-    }
+        function showView(id) {
+            document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+            const view = document.getElementById(id);
+            view.style.display = 'flex';
 
-    function selectChoice(opt, btn) {
-        if (state.isAnswered) return;
-        
-        // Remove previous selection
-        document.querySelectorAll('.btn-choice').forEach(b => b.classList.remove('selected'));
-        
-        // Add current selection
-        btn.classList.add('selected');
-        state.selectedChoice = { opt, btn };
-        
-        // Enable confirm button
-        document.getElementById('btn-confirm').disabled = false;
-    }
+            // Manage header visibility
+            const isGameResult = id === 'view-result';
+            document.querySelector('header').style.display = isGameResult ? 'none' : 'flex';
 
-    function onConfirmClick() {
-        if (state.isAnswered || !state.selectedChoice) return;
-        checkAnswer(state.selectedChoice.opt, state.selectedChoice.btn);
-    }
+            if (id === 'view-settings') {
+                document.getElementById('progress-fill').style.width = '0%';
+            }
 
-    function checkAnswer(selected, btn) {
-        if (state.isAnswered) return;
-        state.isAnswered = true;
-        const q = state.queue[state.currentIndex];
-        
-        // Reset button states for result
-        document.getElementById('btn-confirm').style.display = 'none';
-        const nextBtn = document.getElementById('btn-next');
-        nextBtn.style.display = 'block';
-        nextBtn.innerText = (state.currentIndex === state.queue.length - 1) ? '查看結果' : '下一題';
+            if (id === 'view-leaderboard') {
+                renderLeaderboard();
+            }
+        }
 
-        if (selected.id === q.id) {
-            btn.classList.add('correct');
-            state.score += 10;
-            state.correctCount++;
-        } else {
-            btn.classList.add('wrong');
-            // Show correct one synchronously as requested
-            document.querySelectorAll('.btn-choice').forEach(b => {
-                const targetText = (state.mode === 'EC' || state.mode === 'LISTENING') ? q.mean : q.word;
-                if (b.innerText === targetText) b.classList.add('correct');
+        function resetApp() {
+            state.currentIndex = 0;
+            state.score = 0;
+            state.correctCount = 0;
+            showView('view-settings');
+        }
+
+        /* Settings UI Logic */
+        function setMode(m, el) {
+            state.mode = m;
+            el.parentElement.querySelectorAll('.btn-card').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function setCount(c, el) {
+            state.count = c;
+            el.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function initDBList() {
+            const list = document.getElementById('db-list');
+            const cats = [...new Set(wordDatabase.map(i => i.cat))].sort();
+
+            let html = `<div class="db-item active" onclick="selectDB('ALL', this)">ALL</div>`;
+            cats.forEach(c => {
+                html += `<div class="db-item" onclick="selectDB('${c}', this)">${c}</div>`;
+            });
+            list.innerHTML = html;
+        }
+
+        function selectDB(cat, el) {
+            state.db = cat;
+            document.getElementById('current-db-label').innerText = `題庫：${cat === 'ALL' ? '全部 (ALL)' : cat}`;
+            el.parentElement.querySelectorAll('.db-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            showView('view-settings');
+        }
+
+        function startGame() {
+            let pool = state.db === 'ALL' ? wordDatabase : wordDatabase.filter(i => i.cat === state.db);
+            const limit = state.count === 'inf' ? pool.length : state.count;
+            state.queue = [...pool].sort(() => Math.random() - 0.5).slice(0, limit);
+            state.currentIndex = 0;
+            state.score = 0;
+            state.correctCount = 0;
+
+            // Unlock speech on first user interaction
+            if (!state.isSpeechUnlocked) {
+                unlockSpeech();
+            }
+
+            showView('view-game');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            state.isAnswered = false;
+            const q = state.queue[state.currentIndex];
+            const modeTags = {
+                'EC': '英文 → 中文 (EC)',
+                'CE': '中文 → 英文 (CE)',
+                'CLOZE': '句子練習 (CLOZE)',
+                'SPELL': '拼字挑戰 (SPELL)',
+                'LISTENING': '聽力測驗 (LISTEN)',
+                'FLASHCARD': '單字閃卡 (FLASH)'
+            };
+
+            // Update UI
+            document.getElementById('current-mode-tag').innerText = modeTags[state.mode];
+            document.getElementById('game-score-tag').innerText = `得分: ${state.score}`;
+
+            const confirmBtn = document.getElementById('btn-confirm');
+            const nextBtn = document.getElementById('btn-next');
+
+            if (state.mode === 'FLASHCARD' || state.mode === 'SPELL') {
+                confirmBtn.style.display = 'none';
+                nextBtn.style.display = 'block';
+                nextBtn.innerText = (state.currentIndex === state.queue.length - 1) ? '查看結果' : '下一題';
+            } else {
+                confirmBtn.style.display = 'block';
+                confirmBtn.innerText = '確定';
+                confirmBtn.disabled = true;
+                nextBtn.style.display = 'none';
+            }
+
+            const progress = ((state.currentIndex) / state.queue.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+
+            const wordDisplay = document.getElementById('word-display');
+            const subDisplay = document.getElementById('sub-display');
+            const choiceArea = document.getElementById('choice-area');
+            const spellArea = document.getElementById('spell-area');
+
+            choiceArea.classList.remove('hidden');
+            spellArea.classList.add('hidden');
+            wordDisplay.style.filter = 'none';
+            wordDisplay.parentElement.style.display = 'flex';
+
+            // Mode specific rendering
+            switch (state.mode) {
+                case 'EC':
+                    wordDisplay.innerText = q.word;
+                    subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____');
+                    renderChoices('mean');
+                    playVoice();
+                    break;
+                case 'CE':
+                    wordDisplay.innerText = q.mean.split(') ').pop(); // Remove "(n.) " prefix
+                    subDisplay.innerText = "請選擇正確的英文單字";
+                    renderChoices('word');
+                    break;
+                case 'CLOZE':
+                    wordDisplay.innerText = "";
+                    wordDisplay.parentElement.style.display = 'none';
+                    subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____') + `\n(${q.mean})`;
+                    renderChoices('word');
+                    break;
+                case 'SPELL':
+                    wordDisplay.innerText = q.mean.split(') ').pop();
+                    subDisplay.innerText = q.sentence.replace(new RegExp(q.word, 'gi'), '_____');
+                    choiceArea.classList.add('hidden');
+                    spellArea.classList.remove('hidden');
+                    const input = document.getElementById('input-spell');
+                    input.value = '';
+                    input.focus();
+                    input.onkeyup = (e) => {
+                        if (e.key === 'Enter') checkSpell();
+                    };
+                    break;
+                case 'LISTENING':
+                    wordDisplay.innerText = "👂 ???";
+                    subDisplay.innerText = "請聽音辨字";
+                    renderChoices('word');
+                    playVoice();
+                    break;
+                case 'FLASHCARD':
+                    wordDisplay.innerText = q.word;
+                    subDisplay.innerText = `${q.mean}\n\n${q.sentence}`;
+                    choiceArea.classList.add('hidden');
+                    break;
+            }
+        }
+
+        function renderChoices(key) {
+            const q = state.queue[state.currentIndex];
+            const area = document.getElementById('choice-area');
+            area.innerHTML = '';
+            state.selectedChoice = null;
+
+            // Pick 3 random wrong options
+            let wrongs = wordDatabase.filter(i => i.id !== q.id).sort(() => Math.random() - 0.5).slice(0, 3);
+            let choices = [q, ...wrongs].sort(() => Math.random() - 0.5);
+
+            choices.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-choice';
+                btn.innerText = opt[key];
+                btn.onclick = () => selectChoice(opt, btn);
+                area.appendChild(btn);
             });
         }
-    }
 
-    function checkSpell() {
-        if (state.isAnswered) return;
-        const input = document.getElementById('input-spell');
-        const userValue = input.value.trim().toLowerCase();
-        const correctValue = state.queue[state.currentIndex].word.toLowerCase();
-        
-        state.isAnswered = true;
-        if (userValue === correctValue) {
-            input.style.borderColor = 'var(--success)';
-            state.score += 10;
-            state.correctCount++;
-        } else {
-            input.style.borderColor = 'var(--error)';
-            document.getElementById('word-display').innerText = state.queue[state.currentIndex].word;
+        function selectChoice(opt, btn) {
+            if (state.isAnswered) return;
+
+            // Remove previous selection
+            document.querySelectorAll('.btn-choice').forEach(b => b.classList.remove('selected'));
+
+            // Add current selection
+            btn.classList.add('selected');
+            state.selectedChoice = { opt, btn };
+
+            // Enable confirm button
+            document.getElementById('btn-confirm').disabled = false;
         }
-        displayNextButton();
-    }
 
-    function displayNextButton() {
-        // Obsolete with inline buttons
-    }
+        function onConfirmClick() {
+            if (state.isAnswered || !state.selectedChoice) return;
+            checkAnswer(state.selectedChoice.opt, state.selectedChoice.btn);
+        }
 
-    function handleNext() {
-        if (state.mode === 'FLASHCARD' || state.isAnswered) {
-            state.currentIndex++;
-            if (state.currentIndex >= state.queue.length) {
-                showResult();
+        function checkAnswer(selected, btn) {
+            if (state.isAnswered) return;
+            state.isAnswered = true;
+            const q = state.queue[state.currentIndex];
+
+            // Reset button states for result
+            document.getElementById('btn-confirm').style.display = 'none';
+            const nextBtn = document.getElementById('btn-next');
+            nextBtn.style.display = 'block';
+            nextBtn.innerText = (state.currentIndex === state.queue.length - 1) ? '查看結果' : '下一題';
+
+            if (selected.id === q.id) {
+                btn.classList.add('correct');
+                state.score += 10;
+                state.correctCount++;
             } else {
-                renderQuestion();
+                btn.classList.add('wrong');
+                // Show correct one synchronously as requested
+                document.querySelectorAll('.btn-choice').forEach(b => {
+                    const targetText = (state.mode === 'EC' || state.mode === 'LISTENING') ? q.mean : q.word;
+                    if (b.innerText === targetText) b.classList.add('correct');
+                });
             }
-        } else if (state.mode === 'SPELL') {
-            checkSpell();
-        }
-    }
-
-    function showResult() {
-        // Update cumulative progress
-        const sessionCount = state.queue.length;
-        const oldLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
-        
-        state.totalWords += sessionCount;
-        const newLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
-
-        if (newLevel > oldLevel) {
-            handleLevelUp(newLevel);
         }
 
-        saveProgress();
+        function checkSpell() {
+            if (state.isAnswered) return;
+            const input = document.getElementById('input-spell');
+            const userValue = input.value.trim().toLowerCase();
+            const correctValue = state.queue[state.currentIndex].word.toLowerCase();
 
-        showView('view-result');
-        document.getElementById('final-score').innerText = state.score;
-        document.getElementById('result-summary').innerText = `你答對了 ${state.correctCount} 題，共 ${state.queue.length} 題`;
-        document.getElementById('progress-fill').style.width = '100%';
-    }
-
-    function handleLevelUp(lvl) {
-        const now = new Date();
-        const timeStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-        
-        // Record record
-        state.leaderRecords.unshift({ level: lvl, time: timeStr });
-        
-        // Show modal
-        document.getElementById('level-up-msg').innerText = `恭喜您進入第 ${lvl} 級`;
-        document.getElementById('level-modal').style.display = 'flex';
-    }
-
-    function closeLevelModal() {
-        document.getElementById('level-modal').style.display = 'none';
-    }
-
-    function renderLeaderboard() {
-        document.getElementById('total-words-val').innerText = state.totalWords;
-        const container = document.getElementById('leaderboard-container');
-        if (state.leaderRecords.length === 0) {
-            container.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted);">尚未達成等級升遷...繼續加油！</div>';
-            return;
+            state.isAnswered = true;
+            if (userValue === correctValue) {
+                input.style.borderColor = 'var(--success)';
+                state.score += 10;
+                state.correctCount++;
+            } else {
+                input.style.borderColor = 'var(--error)';
+                document.getElementById('word-display').innerText = state.queue[state.currentIndex].word;
+            }
+            displayNextButton();
         }
 
-        let html = '';
-        state.leaderRecords.forEach(r => {
-            html += `
+        function displayNextButton() {
+            // Obsolete with inline buttons
+        }
+
+        function handleNext() {
+            if (state.mode === 'FLASHCARD' || state.isAnswered) {
+                state.currentIndex++;
+                if (state.currentIndex >= state.queue.length) {
+                    showResult();
+                } else {
+                    renderQuestion();
+                }
+            } else if (state.mode === 'SPELL') {
+                checkSpell();
+            }
+        }
+
+        function showResult() {
+            // Update cumulative progress
+            const sessionCount = state.queue.length;
+            const oldLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
+
+            state.totalWords += sessionCount;
+            const newLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
+
+            if (newLevel > oldLevel) {
+                handleLevelUp(newLevel);
+            }
+
+            saveProgress();
+
+            showView('view-result');
+            document.getElementById('final-score').innerText = state.score;
+            document.getElementById('result-summary').innerText = `你答對了 ${state.correctCount} 題，共 ${state.queue.length} 題`;
+            document.getElementById('progress-fill').style.width = '100%';
+        }
+
+        function handleLevelUp(lvl) {
+            const now = new Date();
+            const timeStr = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            // Record record
+            state.leaderRecords.unshift({ level: lvl, time: timeStr });
+
+            // Show modal
+            document.getElementById('level-up-msg').innerText = `恭喜您進入第 ${lvl} 級`;
+            document.getElementById('level-modal').style.display = 'flex';
+        }
+
+        function closeLevelModal() {
+            document.getElementById('level-modal').style.display = 'none';
+        }
+
+        function renderLeaderboard() {
+            document.getElementById('total-words-val').innerText = state.totalWords;
+            const container = document.getElementById('leaderboard-container');
+            if (state.leaderRecords.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted);">尚未達成等級升遷...繼續加油！</div>';
+                return;
+            }
+
+            let html = '';
+            state.leaderRecords.forEach(r => {
+                html += `
                 <div class="leaderboard-item">
                     <span class="lvl">LEVEL ${r.level}</span>
                     <span class="tm">${r.time}</span>
                 </div>
             `;
-        });
-        container.innerHTML = html;
-    }
-
-    /* Helper Tools */
-    function unlockSpeech() {
-        if ('speechSynthesis' in window && !state.isSpeechUnlocked) {
-            // Some browsers require resume() to be called within a user gesture
-            window.speechSynthesis.resume();
-            const msg = new SpeechSynthesisUtterance('');
-            msg.volume = 0;
-            window.speechSynthesis.speak(msg);
-            state.isSpeechUnlocked = true;
-        }
-    }
-
-    function playVoice() {
-        if (!('speechSynthesis' in window)) {
-            alert("您的裝置不支援語音合成。");
-            return;
+            });
+            container.innerHTML = html;
         }
 
-        // 先執行 resume 以防引擎卡住，再 cancel 前面的任務
-        window.speechSynthesis.resume();
-        window.speechSynthesis.cancel();
-        
-        const q = state.queue[state.currentIndex];
-        if(!q) return;
+        /* Helper Tools */
+        function unlockSpeech() {
+            if ('speechSynthesis' in window && !state.isSpeechUnlocked) {
+                // Some browsers require resume() to be called within a user gesture
+                window.speechSynthesis.resume();
+                const msg = new SpeechSynthesisUtterance('');
+                msg.volume = 0;
+                window.speechSynthesis.speak(msg);
+                state.isSpeechUnlocked = true;
+            }
+        }
 
-        // 電腦版也需要極短延遲 (100ms) 給予瀏覽器清空緩衝，避免發音截斷
-        setTimeout(() => {
-            // 將 utterance 存入 state 以防被垃圾回收 (GC bug in Chrome)
-            state.currentUtterance = new SpeechSynthesisUtterance(q.word);
-            state.currentUtterance.lang = 'en-US';
-            state.currentUtterance.rate = 0.9; 
-            state.currentUtterance.volume = 1;
-            state.currentUtterance.pitch = 1;
-
-            const voices = window.speechSynthesis.getVoices();
-            if (voices && voices.length > 0) {
-                const enVoice = voices.find(v => v.lang.includes('en-US') && v.localService) || 
-                                voices.find(v => v.lang.includes('en-US')) ||
-                                voices.find(v => v.lang.startsWith('en'));
-                if (enVoice) state.currentUtterance.voice = enVoice;
+        function playVoice() {
+            if (!('speechSynthesis' in window)) {
+                alert("您的裝置不支援語音合成。");
+                return;
             }
 
-            window.speechSynthesis.speak(state.currentUtterance);
-        }, 100);
-    }
+            // 先執行 resume 以防引擎卡住，再 cancel 前面的任務
+            window.speechSynthesis.resume();
+            window.speechSynthesis.cancel();
 
-    function toggleTheme() {
-        const body = document.body;
-        const icon = document.getElementById('theme-icon');
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
-            icon.innerText = '🌙';
-            state.theme = 'light';
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            icon.innerText = '☀️';
-            state.theme = 'dark';
+            const q = state.queue[state.currentIndex];
+            if (!q) return;
+
+            // 電腦版也需要極短延遲 (100ms) 給予瀏覽器清空緩衝，避免發音截斷
+            setTimeout(() => {
+                // 將 utterance 存入 state 以防被垃圾回收 (GC bug in Chrome)
+                state.currentUtterance = new SpeechSynthesisUtterance(q.word);
+                state.currentUtterance.lang = 'en-US';
+                state.currentUtterance.rate = 0.9;
+                state.currentUtterance.volume = 1;
+                state.currentUtterance.pitch = 1;
+
+                const voices = window.speechSynthesis.getVoices();
+                if (voices && voices.length > 0) {
+                    const enVoice = voices.find(v => v.lang.includes('en-US') && v.localService) ||
+                        voices.find(v => v.lang.includes('en-US')) ||
+                        voices.find(v => v.lang.startsWith('en'));
+                    if (enVoice) state.currentUtterance.voice = enVoice;
+                }
+
+                window.speechSynthesis.speak(state.currentUtterance);
+            }, 100);
         }
-    }
-</script>
+
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                icon.innerText = '🌙';
+                state.theme = 'light';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.innerText = '☀️';
+                state.theme = 'dark';
+            }
+        }
+    </script>
 
 </body>
+
 </html>
