@@ -693,7 +693,10 @@
                 </div>
 
                 <div id="spell-area" class="hidden">
-                    <input type="text" id="input-spell" placeholder="在此輸入拼字..." autocomplete="off">
+                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+                        <input type="text" id="input-spell" placeholder="在此輸入拼字..." autocomplete="off" style="margin-bottom: 0;">
+                        <button class="btn-icon" id="btn-hint" onclick="showSpellHint()" title="提示首字母" style="background: var(--warning); color: white;">💡</button>
+                    </div>
                 </div>
 
                 <div id="choice-area" class="choice-grid">
@@ -966,6 +969,8 @@
                     input.onkeyup = (e) => {
                         if (e.key === 'Enter') checkSpell();
                     };
+                    document.getElementById('btn-hint').disabled = false;
+                    document.getElementById('btn-hint').style.opacity = '1';
                     break;
                 case 'LISTENING':
                     wordDisplay.innerText = "👂 ???";
@@ -1034,6 +1039,7 @@
                 btn.classList.add('correct');
                 state.score += 10;
                 state.correctCount++;
+                incrementProgress();
             } else {
                 btn.classList.add('wrong');
                 // Show correct one synchronously as requested
@@ -1051,10 +1057,13 @@
             const correctValue = state.queue[state.currentIndex].word.toLowerCase();
 
             state.isAnswered = true;
+            document.getElementById('btn-hint').disabled = true;
+            document.getElementById('btn-hint').style.opacity = '0.5';
             if (userValue === correctValue) {
                 input.style.borderColor = 'var(--success)';
                 state.score += 10;
                 state.correctCount++;
+                incrementProgress();
             } else {
                 input.style.borderColor = 'var(--error)';
                 document.getElementById('word-display').innerText = state.queue[state.currentIndex].word;
@@ -1080,17 +1089,6 @@
         }
 
         function showResult() {
-            // Update cumulative progress
-            const sessionCount = state.queue.length;
-            const oldLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
-
-            state.totalWords += sessionCount;
-            const newLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
-
-            if (newLevel > oldLevel) {
-                handleLevelUp(newLevel);
-            }
-
             saveProgress();
 
             showView('view-result');
@@ -1113,6 +1111,34 @@
 
         function closeLevelModal() {
             document.getElementById('level-modal').style.display = 'none';
+        }
+
+        function incrementProgress() {
+            const oldLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
+            state.totalWords++;
+            const newLevel = Math.floor(state.totalWords / WORDS_PER_LEVEL) + 1;
+
+            if (newLevel > oldLevel) {
+                handleLevelUp(newLevel);
+            }
+            saveProgress();
+        }
+
+        function showSpellHint() {
+            if (state.isAnswered) return;
+            const q = state.queue[state.currentIndex];
+            const input = document.getElementById('input-spell');
+            const firstLetter = q.word.charAt(0);
+            
+            if (!input.value.toLowerCase().startsWith(firstLetter.toLowerCase())) {
+                input.value = firstLetter + input.value;
+            }
+            input.focus();
+            
+            // Disable hint after use
+            const hintBtn = document.getElementById('btn-hint');
+            hintBtn.disabled = true;
+            hintBtn.style.opacity = '0.5';
         }
 
         function renderLeaderboard() {
